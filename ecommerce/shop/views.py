@@ -9,13 +9,18 @@ from rest_framework.decorators import api_view
 from rest_framework import filters
 from rest_framework import generics
 
-@api_view(['GET'])
-def getProduct(request):
-    prods = Product.objects.all()
-    serializer = ProductSerializer(prods, many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def getProduct(request):
+#     prods = Product.objects.all()
+#     serializer = ProductSerializer(prods, many=True)
+#     return Response(serializer.data)                  
+#function based view ma image ko right path janna only relative path like / media/shop/images bata janxa so class based use grya
 
-class UserListView(generics.ListAPIView):
+class GetProduct(generics.ListAPIView):
+    queryset= Product.objects.all()
+    serializer_class = ProductSerializer
+
+class ApiSearch(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
