@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from .views import UserListView
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -27,4 +28,6 @@ urlpatterns = [
     path('productview', views.productView, name='productview'),
     path('checkout', views.checkout, name='checkout'),
     path('api/', views.getProduct, name='api'),
+    path('apisearch', UserListView.as_view(), name='search'),
+    path('<int:id>', views.aboutProduct, name='aboutProduct'),
 ]

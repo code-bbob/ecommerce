@@ -6,12 +6,32 @@ from django.http import HttpResponse
 from .serializers import ProductSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import filters
+from rest_framework import generics
 
 @api_view(['GET'])
 def getProduct(request):
     prods = Product.objects.all()
     serializer = ProductSerializer(prods, many=True)
     return Response(serializer.data)
+
+class UserListView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['productName', 'desc']
+    ordering_fields = ['price']
+
+
+
+
+def aboutProduct(request, id):
+    print(id)
+    prodDetail=Product.objects.filter(productId=id)
+    params={'prodDetail': prodDetail}
+    return render(request, 'shop/product.html', params)
+
+
 
 def index(request):
     # products = Product.objects.all()
