@@ -1,0 +1,15 @@
+{% extends 'shop/basic.html' %}
+{% block title%} Product {% endblock %}
+{% block body %} 
+
+{% for prod in prodDetail %}
+<h1>{{prod.productName}}</h1>
+
+<p>{{prod.desc}}</p>
+
+<img src="/media/{{prod.image}}" alt="loading">
+
+{% endfor %}
+
+
+{% endblock %}
