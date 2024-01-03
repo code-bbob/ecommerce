@@ -13,5 +13,8 @@ urlpatterns = [
     path('checkout', views.checkout, name='checkout'),
     path('api/', views.GetProduct.as_view(), name='api'),
     path('apisearch', views.ApiSearch.as_view(), name='search'),
+    path('api/<int:id>', views.ProductSearch.as_view(), name='aboutProduct'),
     path('<int:id>', views.aboutProduct, name='aboutProduct'),
+    path('api/login/', views.UserLoginView.as_view(), name='user-login'),
+    path('api/signup/', views.UserSignupView.as_view(), name='user-signup'),
 ]
