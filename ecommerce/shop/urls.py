@@ -17,4 +17,6 @@ urlpatterns = [
     path('<int:id>', views.aboutProduct, name='aboutProduct'),
     path('api/login/', views.UserLoginView.as_view(), name='user-login'),
     path('api/signup/', views.UserSignupView.as_view(), name='user-signup'),
+    path('api/catsearch/<str:name>', views.CatSearch.as_view(), name='catsearch'),
+
 ]

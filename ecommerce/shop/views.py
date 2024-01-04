@@ -37,9 +37,7 @@ class ProductSearch(generics.ListAPIView):
     def get_queryset(self):
         # Retrieve the 'id' query parameter from the request
         id = self.kwargs.get('id')
-        print(id)
-        print('hereeee')
-        
+
         # Filter the queryset based on the 'id' parameter
         if id:
             queryset = Product.objects.filter(productId=id)
@@ -68,13 +66,19 @@ class UserSignupView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class CatSearch(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['price']
 
+    def get_queryset(self):
+        cat = self.kwargs.get('name')
 
-
-
-
-
-
+        if cat:
+            queryset = Product.objects.filter(category=cat)
+    
+        return queryset
+        
 
 def aboutProduct(request, id):
     print(id)
