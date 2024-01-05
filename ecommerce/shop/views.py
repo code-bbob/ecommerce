@@ -3,7 +3,7 @@ from .models import Product,Dummy
 from math import ceil
 from django.contrib import messages 
 from django.http import HttpResponse
-from .serializers import ProductSerializer, UserSerializer
+from .serializers import ProductSerializer, UserSerializer, CommentSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import filters
@@ -11,7 +11,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
+from rest_framework.parsers import JSONParser
 
 # @api_view(['GET'])
 # def getProduct(request):
@@ -79,6 +79,21 @@ class CatSearch(generics.ListAPIView):
     
         return queryset
         
+
+
+class CommentView(APIView):
+    def post(self, request, product_id):
+        data = request.data
+        product = Product.objects.get(pk=product_id)
+        serializer = CommentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save(product=product)  # Associate the comment with the dummy object
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 def aboutProduct(request, id):
     print(id)

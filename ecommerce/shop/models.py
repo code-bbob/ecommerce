@@ -14,9 +14,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.productName
-    
+
+
+class Comment(models.Model):
+    product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
+    text = models.CharField(max_length=100)
 
 class Dummy(models.Model):
-    name= models.CharField(max_length=100)
-    age= models.IntegerField()
-    roll= models.IntegerField()
+    id = models.AutoField(primary_key=True)
+    message = models.TextField(max_length=1000)
