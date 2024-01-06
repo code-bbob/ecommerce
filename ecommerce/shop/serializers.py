@@ -4,10 +4,14 @@ from django.contrib.auth.models import User
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField() #yo garexi i can define serializers for user by myself i.e. user ko kun attribute pathaune vanera
     product = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['user','product','text']
+
+    def get_user(self, obj):
+        return obj.user.username
 
 class ProductSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)

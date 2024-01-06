@@ -85,9 +85,10 @@ class CommentView(APIView):
     def post(self, request, product_id):
         data = request.data
         product = Product.objects.get(pk=product_id)
+        user = request.user  # Get the user making the request
         serializer = CommentSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(product=product)  # Associate the comment with the dummy object
+            serializer.save(product=product, user = user)  # Associate the comment with the dummy object
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
