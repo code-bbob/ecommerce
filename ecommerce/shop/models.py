@@ -18,6 +18,7 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
     text = models.CharField(max_length=100)

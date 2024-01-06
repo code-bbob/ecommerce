@@ -7,7 +7,7 @@ class ReplySerializer(serializers.ModelSerializer):
     comment = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Replies
-        fields = '__all__'
+        fields = ['user', 'comment','text']
     def get_user(self, obj):
         return obj.user.username
 
@@ -17,7 +17,7 @@ class CommentSerializer(serializers.ModelSerializer):
     replies = ReplySerializer(many=True, read_only=True)
     class Meta:
         model = Comment
-        fields = ['user','product','text','replies']
+        fields = ['id','user','product','text','replies']
 
     def get_user(self, obj):
         return obj.user.username
