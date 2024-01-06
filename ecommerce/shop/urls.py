@@ -19,5 +19,7 @@ urlpatterns = [
     path('api/signup/', views.UserSignupView.as_view(), name='user-signup'),
     path('api/catsearch/<str:name>', views.CatSearch.as_view(), name='catsearch'),
     path('api/comments/<int:product_id>/', views.CommentView.as_view(), name='comment'),
+    path('api/comments/<int:product_id>/replies/<int:comment_id>/', views.ReplyView.as_view(), name='comment'),
+
 
 ]

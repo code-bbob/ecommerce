@@ -1,17 +1,27 @@
 from rest_framework import serializers
-from shop.models import Product, Dummy, Comment
+from shop.models import Product, Dummy, Comment, Replies
 from django.contrib.auth.models import User
 
+class ReplySerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField() #yo garexi i can define serializers for user by myself i.e. user ko kun attribute pathaune vanera
+    comment = serializers.PrimaryKeyRelatedField(read_only=True)
+    class Meta:
+        model = Replies
+        fields = '__all__'
+    def get_user(self, obj):
+        return obj.user.username
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField() #yo garexi i can define serializers for user by myself i.e. user ko kun attribute pathaune vanera
     product = serializers.PrimaryKeyRelatedField(read_only=True)
+    replies = ReplySerializer(many=True, read_only=True)
     class Meta:
         model = Comment
-        fields = ['user','product','text']
+        fields = ['user','product','text','replies']
 
     def get_user(self, obj):
         return obj.user.username
+
 
 class ProductSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
