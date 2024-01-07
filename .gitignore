@@ -9,6 +9,13 @@ venv/
 env/
 *.env
 
+# Ignore Django migration files
+
+*/ecommerce/ecommerce/migrations/
+*/migrations/
+*/migrations/__init__.py
+
+
 # Development and runtime files
 db.sqlite3
 *.log
@@ -19,9 +26,6 @@ local_settings.py
 # Media and static files
 */media/
 */static/
-
-# Ignore Django migration files
-*/migrations/
 
 # Ignore pipenv virtual environment
 /.venv/
