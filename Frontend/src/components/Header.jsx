@@ -101,7 +101,7 @@ export function HeaderBottom() {
             return (
               <div>
                 <div>
-                  <h1 key={index}>{category.subcategory.toUpperCase()}</h1>
+                  <h1 key={index}>{category.brandName.toUpperCase()}</h1>
                   {
                     products.map((sproducts, i)=>{
                       return (
