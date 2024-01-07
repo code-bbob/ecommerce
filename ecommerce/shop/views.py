@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product,Dummy,Comment
+from .models import Product,Comment
 from math import ceil
 from django.contrib import messages 
 from django.http import HttpResponse
@@ -88,7 +88,7 @@ class CommentView(APIView):
         user = request.user  # Get the user making the request
         serializer = CommentSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(product=product, user = user)  # Associate the comment with the dummy object
+            serializer.save(product=product, user = user)  
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -106,58 +106,4 @@ class ReplyView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def aboutProduct(request, id):
-    print(id)
-    prodDetail=Product.objects.filter(productId=id)
-    params={'prodDetail': prodDetail}
-    return render(request, 'shop/product.html', params)
 
-
-
-def index(request):
-    # products = Product.objects.all()
-    # print(products)
-    # n = len(products)
-    # nSlides = n//4 + ceil((n/4)-(n//4))
-
-    allProds = []
-    catprods = Product.objects.values('category', 'productId')
-    cats = {item['category'] for item in catprods}
-    for cat in cats:
-        prod = Product.objects.filter(category=cat)
-        n = len(prod)
-        nSlides = n // 4 + ceil((n / 4) - (n // 4))
-        allProds.append([prod, range(1, nSlides), nSlides])
-
-    params = {'allProds':allProds}
-    return render(request, 'shop/index.html', params)
-
-def about(request):
-    return render(request, 'shop/about.html')
-
-def contact(request):
-    return render(request, 'shop/contact.html')
-
-def tracker(request):
-    return render(request, 'shop/tracker.html')
-
-def search(request):
-    query=request.GET['query']
-    if len(query)>78:
-        allProducts=Product.objects.none()
-    else:
-        allProductsName=Product.objects.filter(productName__icontains=query)
-        allProcutsDesc=Product.objects.filter(desc__icontains=query)
-        allProducts=allProductsName.union(allProcutsDesc)
-    if allProducts.count()==0:
-        messages.warning(request, "No search results found. Please refine your query.")
-    
-    params={'allProducts': allProducts,'query': query}
-    print(allProducts)
-    return render(request, 'shop/search.html', params)
-
-def productView(request):
-    return render(request, 'shop/prodView.html')
-
-def checkout(request):
-    return render(request, 'shop/checkout.html')

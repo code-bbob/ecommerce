@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+*/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+*.env
+
+# Ignore Django migration files
+
+*/ecommerce/ecommerce/migrations/
+*/migrations/
+*/migrations/__init__.py
+
+
+# Development and runtime files
+db.sqlite3
+*.log
+*.pyc
+*.pyo
+local_settings.py
+
+# Media and static files
+*/media/
+*/static/
+
+# Ignore pipenv virtual environment
+/.venv/
+
+# Ignore local database settings
+/local_settings.py
+
+# Ignore IDE and editor files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.idea/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore compiled JavaScript files
+*/node_modules/
+*.log
+*.lock

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Dummy, Comment, Replies
+from .models import Product, Comment, Replies
 from django.contrib.auth.models import User
 
 class ReplySerializer(serializers.ModelSerializer):

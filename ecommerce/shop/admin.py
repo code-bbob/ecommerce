@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import Product, Dummy, Comment
+from .models import Product, Comment
 
 # Register your models here.
 admin.site.register(Product)
-admin.site.register(Dummy)
 admin.site.register(Comment)

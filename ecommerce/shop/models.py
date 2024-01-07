@@ -29,10 +29,3 @@ class Replies(models.Model):
     comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
 
-
-
-
-
-class Dummy(models.Model):
-    id = models.AutoField(primary_key=True)
-    message = models.TextField(max_length=1000)
