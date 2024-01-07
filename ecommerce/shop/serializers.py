@@ -27,7 +27,7 @@ class ProductSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ['productId','productName','category','subcategory','price','desc','pubDate','image','comments']
+        fields = ['productId','productName','category','brandName','price','desc','pubDate','image','comments']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
