@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product,Dummy,Comment
+from .models import Product,Comment
 from math import ceil
 from django.contrib import messages 
 from django.http import HttpResponse
@@ -88,7 +88,7 @@ class CommentView(APIView):
         user = request.user  # Get the user making the request
         serializer = CommentSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(product=product, user = user)  # Associate the comment with the dummy object
+            serializer.save(product=product, user = user)  
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
