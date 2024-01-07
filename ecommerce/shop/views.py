@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .models import Product,Dummy
+from .models import Product,Dummy,Comment
 from math import ceil
 from django.contrib import messages 
 from django.http import HttpResponse
-from .serializers import ProductSerializer, UserSerializer, CommentSerializer
+from .serializers import ProductSerializer, UserSerializer, CommentSerializer, ReplySerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import filters
@@ -94,7 +94,17 @@ class CommentView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+class ReplyView(APIView):
+    def post(self, request, comment_id):
+        data = request.data
+        comment = Comment.objects.get(pk=comment_id)
+        user = request.user  # Get the user making the request
+        serializer = ReplySerializer(data=data)
+        if serializer.is_valid():
+            serializer.save(comment=comment, user=user)  # Save the new comment
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def aboutProduct(request, id):
     print(id)
