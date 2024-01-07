@@ -94,46 +94,14 @@ class CommentView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class ReplyView(APIView):
-#     def post(self, request, comment_id):
-#         data = request.data
-#         comment = Comment.objects.get(pk=comment_id)
-#         user = request.user  # Get the user making the request
-#         data['user'] = user.id
-#         data['product'] = comment.product.productId
-
-#         data.pop('comment', None)
-
-#         # product = Product.objects.get(pk=product_id)
-
-#         # # Include the 'product' key in the data
-#         # data['product'] = product.productId
-
-#         serializer = CommentSerializer(data=data)
-#         if serializer.is_valid():
-#             serializer.save(comment=comment, user = user)  # Associate the comment with the dummy object
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class ReplyView(APIView):
     def post(self, request, comment_id):
         data = request.data
         comment = Comment.objects.get(pk=comment_id)
-        print(comment)
-        print("aklsdmasdlas kd as dsal asdllasd ")
-        print(comment.id)
         user = request.user  # Get the user making the request
-
-        # Add the required fields for creating a new comment
-        data['user'] = user.id
-        data['comment'] = comment.id  # Use 'product_id' instead of 'id'
-        print(data)
-
         serializer = ReplySerializer(data=data)
         if serializer.is_valid():
-            serializer.save()  # Save the new comment
+            serializer.save(comment=comment, user=user)  # Save the new comment
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
