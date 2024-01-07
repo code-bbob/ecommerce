@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Blog
+from rest_framework import generics
+from .serializers import BlogSerializer
 
 # Create your views here.
 
-def blogIndex(request):
-    return HttpResponse("this is blog index")
+class blogIndex(generics.ListAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer

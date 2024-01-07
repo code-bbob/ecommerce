@@ -19,5 +19,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.blogIndex, name='blogIndex'),
+    path('', views.blogIndex.as_view(), name='blogIndex'),
 ]
