@@ -31,6 +31,13 @@ class ApiSearch(generics.ListAPIView):
     search_fields = ['productName', 'desc']
     ordering_fields = ['price']
 
+class BrandSearch(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['brandName']
+    ordering_fields = ['price']
+
 class ProductSearch(generics.ListAPIView):
     serializer_class = ProductSerializer
 
