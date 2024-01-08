@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-*/__pycache__/
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
@@ -12,8 +12,8 @@ env/
 # Ignore Django migration files
 
 */ecommerce/ecommerce/migrations/
-*/migrations/
-*/migrations/__init__.py
+migrations/
+migrations/__init__.py
 
 
 # Development and runtime files
