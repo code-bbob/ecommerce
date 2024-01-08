@@ -32,7 +32,7 @@ export function HeaderTop() {
 export function HeaderMid() {
   return (
     <>
-      <div className="p-5 flex items-center justify-between">
+      <div className="p-4 flex items-center justify-between">
         <img className="h-30 w-44" src="./public/digi.jpg" alt="oop" />
 
         <div className="flex justify-between items-center border w-1/3  rounded-md ">
@@ -60,64 +60,104 @@ export function HeaderMid() {
 }
 
 export function HeaderBottom() {
+  const [products, setProducts] = useState([]);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
-  const [products, setProducts] = useState([])
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/shop/api/")
+      .then((res) => {
+        // console.log(res.data)
+        setProducts(res.data);
+        // console.log("this is prod", products);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  useEffect ( ()=> {
+  const handleMouseEnter = (index) => {
+    setHoveredIndex(index);
+  };
 
-    axios.get("http://localhost:8000/shop/api/")
-    .then((res)=>{
-      setProducts(res.data)
-      console.log(res.data)
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
 
-      
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-  },[])
+  // const categories = [...new Set(products?.filter((product) => product.category))]; //this wont work kina bhae filter le product ko uniqueness nikalxa ra set le kaam gardaina
+  const categories = [...new Set(products?.map((product) => product.category))];  //aba hami sanga unique category xa in form of array which we can map directly
+  // console.log("categ", categories);
+  
 
   return (
     <>
       <div>
-        <nav className="bg-black">
-          <ul className="flex justify-between text-md text-white px-10 py-2">
-          {
-            products.map((product, index)=>{
+        <nav 
+        className="bg-black px-10">
+          <ul onMouseLeave={handleMouseLeave}
+          className="flex justify-between text-md text-white py-2">
+            {categories.map((category, i) => {
               return (
+                <>
+                  <div 
+>
+                    <ul  onMouseEnter={() => handleMouseEnter(i)}
+                    className="flex items-center gap-2">
 
-                <li key={index} className="text-white text-lg flex items-center gap-3">
-                <p>{product.category.charAt(0).toUpperCase() + product.category.slice(1)}</p>
-                <IoIosArrowDropdownCircle/>
-              </li>
-                )
-            })
-          }
+                    
+                    <li
+                      key={i}
+                     
+                      
+                      className="text-white text-lg flex items-center gap-3 cursor-pointer "
+                      style={{ position: "relative" }}
+                    >
+                      {category}
+                      {hoveredIndex === i && (
+                        <div
+                          className="absolute  shadow rounded-md w-fit px-4 py-2"
+                          style={{ top: "36px" }}
+                        >
+                          <ul>
+                    
+                            {products
+                              .filter(
+                                (product) => product.category === category
+                                )
+                                .map((product, j) => {
+                                // console.log("Filtered Product:", product);
+                                return (
+                                  <>
+                                    <div>
+                                      <h1 key={j} className=" text-red-400 mt-1 ">
+                                        {product.brandName} 
+                                      </h1>
+                                      {
+                                        products.filter((prod)=> prod.brandName === product.brandName )
+                                        .map((product, k)=> (
+                                          <li className="text-gray-500" key={k}>{product.productName}</li>
+                                        )
+                                          
+                                        )
+                                      }
+                                    </div>
+                                  </>
+                                );
+                              })}
+                          </ul>
+                        </div>
+                      )}
+                    </li>
+                    <li><IoIosArrowDropdownCircle/></li>
+                    </ul>
+                  </div>
+                </>
+              );
+            })}
           </ul>
-                   
         </nav>
-        {
-          products.map((category, index)=>{
-            return (
-              <div>
-                <div>
-                  <h1 key={index}>{category.brandName.toUpperCase()}</h1>
-                  {
-                    products.map((sproducts, i)=>{
-                      return (
-                         <li className="list-none">
-                          {
-                            sproducts.productName
-                          }
-                         </li>
-                      )
-                    })
-                  }
-                </div>
-              </div>
-            )
-          })
-        }
+
+        
       </div>
     </>
   );

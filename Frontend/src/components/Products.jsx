@@ -24,11 +24,21 @@ export function Products(){
 
     return (
         <>
-        <div>
-            <div>
-                <img src={products.image} alt="" />
-                <p>{products.productName}</p>
-            </div>
+        <div className="flex gap-10 mt-36">
+          {
+
+            products.map((prod,i)=>{
+              return (
+                <>
+                <div className="">
+                  <img className="h-40 w-40" src={prod.image} alt="" />
+                  <p>{prod.productName}</p>
+                </div>
+                </>
+              )
+              
+            })
+          }
         </div>
         </>
     )
