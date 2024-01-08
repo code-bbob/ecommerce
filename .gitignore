@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-*/__pycache__/
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
@@ -10,10 +10,8 @@ env/
 *.env
 
 # Ignore Django migration files
-
-*/ecommerce/ecommerce/migrations/
-*/migrations/
-*/migrations/__init__.py
+migrations/
+migrations/__init__.py
 
 
 # Development and runtime files
@@ -24,8 +22,8 @@ db.sqlite3
 local_settings.py
 
 # Media and static files
-*/media/
-*/static/
+media/
+static/
 
 # Ignore pipenv virtual environment
 /.venv/
@@ -44,14 +42,9 @@ local_settings.py
 Thumbs.db
 
 # Ignore compiled JavaScript files
-/Frontend/node_modules/
-*/node_modules/
 *.log
 *.lock
 
-
-# Node.js
-node_modules/
 # Logs
 logs
 *.log
@@ -60,8 +53,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-node_modules
 dist
 dist-ssr
 *.local
