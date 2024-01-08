@@ -82,7 +82,7 @@ class CatSearch(generics.ListAPIView):
         cat = self.kwargs.get('name')
 
         if cat:
-            queryset = Product.objects.filter(category=cat)
+            queryset = Product.objects.filter(category__iexact=cat)
     
         return queryset
 
@@ -96,7 +96,7 @@ class CatBrandSearch(generics.ListAPIView):
         brand = self.kwargs.get('brandname')
 
         if brand:
-            queryset = Product.objects.filter(category=cat, brandName = brand)
+            queryset = Product.objects.filter(category__iexact=cat, brandName__iexact = brand)
 
         return queryset
 
