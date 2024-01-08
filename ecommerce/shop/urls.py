@@ -14,6 +14,6 @@ urlpatterns = [
     path('api/comments/<int:product_id>/', views.CommentView.as_view(), name='comment'),
     path('api/replies/<int:comment_id>/', views.ReplyView.as_view(), name='comment'),
     path('api/brandsearch',views.BrandSearch.as_view(),name='brandSearch'),
-
+    path('api/catsearch/<str:catname>/<str:brandname>/<str:seriesname>',views.SeriesSearch.as_view(), name='seriessearch'),
 
 ]
