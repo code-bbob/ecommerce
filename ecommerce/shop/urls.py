@@ -10,9 +10,10 @@ urlpatterns = [
     path('api/login/', views.UserLoginView.as_view(), name='user-login'),
     path('api/signup/', views.UserSignupView.as_view(), name='user-signup'),
     path('api/catsearch/<str:name>', views.CatSearch.as_view(), name='catsearch'),
+    path('api/catsearch/<str:catname>/<str:brandname>', views.CatBrandSearch.as_view(), name='catbrandsearch'),
     path('api/comments/<int:product_id>/', views.CommentView.as_view(), name='comment'),
     path('api/replies/<int:comment_id>/', views.ReplyView.as_view(), name='comment'),
-    path('api/brandSearch',views.BrandSearch.as_view(),name='brandSearch'),
+    path('api/brandsearch',views.BrandSearch.as_view(),name='brandSearch'),
 
 
 ]
