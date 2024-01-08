@@ -112,6 +112,8 @@ class SeriesSearch(generics.ListAPIView):
 
         if series:
             queryset = Product.objects.filter(category__iexact=cat, brandName__iexact = brand, series__iexact = series)
+        
+        return queryset
 
 class CommentView(APIView):
     def post(self, request, product_id):
