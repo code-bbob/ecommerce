@@ -99,7 +99,19 @@ class CatBrandSearch(generics.ListAPIView):
             queryset = Product.objects.filter(category__iexact=cat, brandName__iexact = brand)
 
         return queryset
+    
+class SeriesSearch(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['price']
 
+    def get_queryset(self):
+        cat = self.kwargs.get('catname')
+        brand = self.kwargs.get('brandname')
+        series = self.kwargs.get('seriesname')
+
+        if series:
+            queryset = Product.objects.filter(category__iexact=cat, brandName__iexact = brand, series__iexact = series)
 
 class CommentView(APIView):
     def post(self, request, product_id):
