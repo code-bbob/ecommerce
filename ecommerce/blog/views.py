@@ -22,5 +22,14 @@ class blogPost(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def test(request):
-    pass
+class blogView(generics.ListAPIView):
+    serializer_class = BlogSerializer
+
+    def get_queryset(self):
+        
+        id = self.kwargs.get('id')
+
+        if id:
+            queryset = Blog.objects.filter(id=id)
+        
+        return queryset

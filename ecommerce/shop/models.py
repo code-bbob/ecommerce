@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 # Create your models here.
 
 class Product(models.Model):
-    productId = models.AutoField(primary_key=True)
+    productId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     productName = models.CharField(max_length=50)
     category = models.CharField(max_length=50, default='')
     brandName = models.CharField(max_length=50, default='')
@@ -19,14 +20,19 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
+    pubDate = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text
 
 
 class Replies(models.Model):
     user = models.ForeignKey(User,related_name='replies', on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
+    pubDate = models.DateField(auto_now_add=True)
 
