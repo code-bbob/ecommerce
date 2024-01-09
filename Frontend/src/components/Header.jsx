@@ -6,26 +6,34 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { Home } from "./Home";
 
 export function HeaderTop() {
   return (
-    <div className="bg-black text-white flex justify-between items-center p-2">
-      <p>Customer Service: </p>
-      <div className="flex gap-5">
-        <ul className="flex items-center gap-2">
-          <li>
-            <FaUser />
-          </li>
-          <p>My account</p>
-        </ul>
-        <ul className="flex items-center gap-2">
-          <li>
-            <PiSignInBold />
-          </li>
-          <p>Sign in</p>
-        </ul>
-      </div>
-    </div>
+    <div className="bg-black text-white flex justify-between px-3 pt-2">
+  <p className="hover:text-gray-400">Customer Service: </p>
+  <div className="flex items-center gap-4">
+    <ul className="flex items-center gap-1">
+      <li>
+        <Link to="/login" className="flex items-center gap-2 no-underline text-white hover:text-gray-400">
+          <FaUser />
+          <span>My account</span>
+        </Link>
+      </li>
+    </ul>
+    <ul className="flex items-center gap-1">
+      <li>
+        <Link to="/signup" className="flex items-center gap-2 no-underline text-white hover:text-gray-400">
+          <PiSignInBold />
+          <span>Sign in</span>
+        </Link>
+      </li>
+    </ul>
+  </div>
+</div>
+
+    
   );
 }
 
@@ -33,7 +41,9 @@ export function HeaderMid() {
   return (
     <>
       <div className="p-4 flex items-center justify-between">
-        <img className="h-30 w-44" src="./public/digi.jpg" alt="oop" />
+        <Link to="/">
+        <img className="h-30 w-44" src="/digi.jpg" alt="oop" />
+        </Link>
 
         <div className="flex justify-between items-center border w-1/3  rounded-md ">
           <input
@@ -92,7 +102,7 @@ export function HeaderBottom() {
   return (
     <>
       <div>
-        <nav 
+        <nav  
         className="bg-black px-10">
           <ul onMouseLeave={handleMouseLeave}
           className="flex justify-between text-md text-white py-2">
@@ -105,20 +115,20 @@ export function HeaderBottom() {
                     className="flex items-center gap-2">
 
                     
-                    <li
+                    <li 
                       key={i}
                      
                       
-                      className="text-white text-lg flex items-center gap-3 cursor-pointer "
+                      className=" z-10	text-white text-lg flex items-center gap-3 cursor-pointer "
                       style={{ position: "relative" }}
                     >
                       {category}
                       {hoveredIndex === i && (
                         <div
-                          className="absolute  shadow rounded-md w-fit px-4 py-2"
+                          className=" z-10	absolute  shadow rounded-md w-fit px-4 py-2 bg-slate-300"
                           style={{ top: "36px" }}
                         >
-                          <ul>
+                          <ul className="">
                     
                             {products
                               .filter(
@@ -128,14 +138,14 @@ export function HeaderBottom() {
                                 // console.log("Filtered Product:", product);
                                 return (
                                   <>
-                                    <div>
-                                      <h1 key={j} className=" text-red-400 mt-1 ">
+                                    <div className="z-10">
+                                      <h1 key={j} className="z-10 text-red-400 mt-1 ">
                                         {product.brandName} 
                                       </h1>
                                       {
                                         products.filter((prod)=> prod.brandName === product.brandName )
                                         .map((product, k)=> (
-                                          <li className="text-gray-500" key={k}>{product.productName}</li>
+                                          <li className="text-gray-500 z-10	" key={k}>{product.productName}</li>
                                         )
                                           
                                         )
@@ -159,6 +169,7 @@ export function HeaderBottom() {
 
         
       </div>
+      
     </>
   );
 }
