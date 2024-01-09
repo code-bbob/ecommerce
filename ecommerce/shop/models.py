@@ -23,10 +23,15 @@ class Comment(models.Model):
     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
+    pubDate = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text
 
 
 class Replies(models.Model):
     user = models.ForeignKey(User,related_name='replies', on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
+    pubDate = models.DateField(auto_now_add=True)
 
