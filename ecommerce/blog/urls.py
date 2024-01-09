@@ -20,5 +20,6 @@ from . import views
 
 urlpatterns = [
     path('api/', views.blogIndex.as_view(), name='blogIndex'),
-    path('api/post/', views.blogPost.as_view(), name='blogPost')
+    path('api/post/', views.blogPost.as_view(), name='blogPost'),
+    path('api/<str:id>',views.blogView.as_view(), name='blogView'),
 ]
