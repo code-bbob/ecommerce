@@ -6,7 +6,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Home } from "./Home";
 
 export function HeaderTop() {
@@ -38,21 +38,71 @@ export function HeaderTop() {
 }
 
 export function HeaderMid() {
+
+  const navigate = useNavigate()
+  const [searched,setSearched] = useState(false)
+  const [query,setQuery] = useState("") 
+  const [products,setProducts] = useState([])
+
+  useEffect ( ()=> {
+        
+    axios.get("http://localhost:8000/shop/api/")
+    .then((res)=>{
+      setProducts(res.data)
+      console.log("products from api",products)
+      
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[])
+  
+  function handleQuery(e){
+    setQuery(e.target.value)
+    setSearched(true)
+    
+  }
+  const filteredProduct = products.filter(items =>  items.productName.toLowerCase().includes(query.toLowerCase()))
+  const results = filteredProduct.length >0 && query.length >0 ? filteredProduct : null
+  console.log("queried filtered",results)
+  
   return (
     <>
       <div className="p-4 flex items-center justify-between">
         <Link to="/">
         <img className="h-30 w-44" src="/digi.jpg" alt="oop" />
         </Link>
+        <div className="absolute top-24 left-80">
 
-        <div className="flex justify-between items-center border w-1/3  rounded-md ">
+        
+        <div className="flex justify-between items-center border rounded-md w-80 ">
           <input
+            onChange={(e)=>handleQuery(e)}
             className="outline-none w-full p-2"
             type="search"
             placeholder="Search Your Products Here"
           />
           <FaSearch className="bg-orange-400 h-10 w-8 p-1 hover:bg-orange-600" />
         </div>
+        {
+
+          query.length >0 && searched ? ( results && results.length > 0 ? (
+          results?.map(product=> (
+            <>
+            <div className="flex flex-row bg-red-400">
+
+            <div onClick={()=>{
+                  navigate(`/products/${product.productId}`)
+                  setQuery("")
+                }}
+             key={product.id} className="z-40 w-full p-2 block border-1 bg-gray-400">{product.productName}</div>
+            </div>
+            </>
+          )) ) : <p>No Search Found</p> ) : null
+            
+          }
+        </div>
+        
         <ul className="flex gap-5 font-semibold items-center">
           <li>Compare</li>
           <li className="flex items-center gap-1">
