@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
-
+from django.conf import settings
 # Create your models here.
 
 class Product(models.Model):
@@ -21,7 +21,7 @@ class Product(models.Model):
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
     pubDate = models.DateField(auto_now_add=True)
@@ -31,7 +31,7 @@ class Comment(models.Model):
 
 
 class Replies(models.Model):
-    user = models.ForeignKey(User,related_name='replies', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
     pubDate = models.DateField(auto_now_add=True)

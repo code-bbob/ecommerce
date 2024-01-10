@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .serializers import BlogSerializer
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -14,13 +15,19 @@ class blogIndex(generics.ListAPIView):
     serializer_class = BlogSerializer
 
 class blogPost(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
-        serializer = BlogSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if request.user.is_staff:
+            serializer = BlogSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif not request.user.is_staff:
+            return Response({"message": "You do not have staff permission."}, status=403)
+        
+        return Response({"message": "No valid token provided."}, status=401)
 
 class blogView(generics.ListAPIView):
     serializer_class = BlogSerializer
@@ -33,3 +40,5 @@ class blogView(generics.ListAPIView):
             queryset = Blog.objects.filter(id=id)
         
         return queryset
+    
+    
