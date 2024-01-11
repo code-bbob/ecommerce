@@ -193,7 +193,7 @@ export function HeaderBottom() {
                                         {product.brandName} 
                                       </h1>
                                       {
-                                        products.filter((prod)=> prod.brandName === product.brandName )
+                                        products.filter((prod)=> prod.brandName === product.brandName && prod.category === product.category)
                                         .map((product, k)=> (
                                           <li className="text-gray-500 z-10	" key={k}>{product.productName}</li>
                                         )
