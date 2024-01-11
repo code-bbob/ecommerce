@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import  UserLoginSerializer, UserRegistrationSerializer
+from .serializers import  UserLoginSerializer, UserRegistrationSerializer, UserChangePasswordSerializer
 from django.contrib.auth import authenticate
 #from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken,AccessToken
@@ -39,3 +39,25 @@ class UserLoginView(APIView):
     else:
       return Response({'errors':{'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
 
+class UserChangePasswordView(APIView):
+  permission_classes = [IsAuthenticated]
+  def post(self, request, format=None):
+    # Manually define or retrieve the user
+    user = request.user  
+
+    if not user:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Check if the old password is provided in the request
+    old_password = request.data.get('oldpassword', None)
+    if not old_password:
+        return Response({'error': 'Old password is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Check if the provided old password matches the actual password of the user
+    if not user.check_password(old_password):
+        return Response({'error': 'Old password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Continue with changing the password if the old password is correct
+    serializer = UserChangePasswordSerializer(data=request.data, context={'user': user})
+    serializer.is_valid(raise_exception=True)
+    return Response({'msg': 'Password Changed Successfully'}, status=status.HTTP_200_OK)

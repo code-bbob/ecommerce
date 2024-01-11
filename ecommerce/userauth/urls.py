@@ -4,9 +4,10 @@ from rest_framework_simplejwt.views import (
 )
 from django.contrib import admin
 from django.urls import path
-from .views import UserLoginView, UserRegistrationView
+from . import views
 
 urlpatterns = [
-    path('api/register/', UserRegistrationView.as_view(), name='register'),
-    path('api/login/', UserLoginView.as_view(), name='login')
+    path('api/register/', views.UserRegistrationView.as_view(), name='register'),
+    path('api/login/', views.UserLoginView.as_view(), name='login'),
+    path('api/change-password/',views.UserChangePasswordView.as_view(),name='changepassword')
 ]
