@@ -1,12 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import  UserLoginSerializer, UserRegistrationSerializer, UserChangePasswordSerializer, UserPasswordResetSerializer,SendPasswordResetEmailSerializer
+from .serializers import  UserLoginSerializer, UserRegistrationSerializer, UserChangePasswordSerializer, UserPasswordResetSerializer,SendPasswordResetEmailSerializer, UserInfoSerializer
 from django.contrib.auth import authenticate
 #from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken,AccessToken
 from rest_framework.permissions import IsAuthenticated
 from .utils import Util
+from rest_framework import generics
 
 
 # Generate Token Manually
@@ -45,7 +46,6 @@ class UserChangePasswordView(APIView):
   def post(self, request, format=None):
     # Manually define or retrieve the user
     user = request.user  
-
     if not user:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -75,3 +75,10 @@ class UserPasswordResetView(APIView):
     serializer = UserPasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
     serializer.is_valid(raise_exception=True)
     return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
+  
+class UserInfoView(APIView):
+  permission_classes=[IsAuthenticated]
+  def get(self, request, format=None):
+    serializer= UserInfoSerializer(request.user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
