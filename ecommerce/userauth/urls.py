@@ -9,5 +9,7 @@ from . import views
 urlpatterns = [
     path('api/register/', views.UserRegistrationView.as_view(), name='register'),
     path('api/login/', views.UserLoginView.as_view(), name='login'),
-    path('api/change-password/',views.UserChangePasswordView.as_view(),name='changepassword')
+    path('api/change-password/',views.UserChangePasswordView.as_view(),name='changepassword'),
+    path('api/reset-password/',views.SendPasswordResetEmailView.as_view(),name='resetpassword'),
+    path('api/reset-password/<uid>/<token>/', views.UserPasswordResetView.as_view(), name='reset-password'),
 ]
