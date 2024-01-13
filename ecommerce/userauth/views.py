@@ -26,7 +26,8 @@ class UserRegistrationView(APIView):
     serializer.is_valid(raise_exception=True)
     user = serializer.save()
     token = get_tokens_for_user(user)
-    return Response({'token':token, 'msg':'Registration Successful'}, status=status.HTTP_201_CREATED)
+    userDetails = {"name" :user.name, "email":user.email}
+    return Response({'token':token, 'msg':'Registration Successful','userDetails': userDetails}, status=status.HTTP_201_CREATED)
   
 class UserLoginView(APIView):
   def post(self, request, format=None):
@@ -37,7 +38,8 @@ class UserLoginView(APIView):
     user = authenticate(email=email, password=password)
     if user is not None:
       token = get_tokens_for_user(user)
-      return Response({'token':token, 'msg':'Login Success'}, status=status.HTTP_200_OK)
+      userDetails = {"name" :user.name, "email":user.email}
+      return Response({'token':token, 'msg':'Login Success','userDetails': userDetails}, status=status.HTTP_200_OK)
     else:
       return Response({'errors':{'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
 
