@@ -7,12 +7,40 @@ import { HeaderBottom, HeaderMid, HeaderTop } from './components/Header'
 import { Home } from './components/Home'
 import { SingleProduct } from './components/Products/SingleProduct'
 import { SearchedProductsCategory } from './components/Products/SearchedProductsCategory'
+import { useDispatch } from 'react-redux'
+import { setUserDetails } from './Redux/UserSlice'
 // index.js or App.js
 
 
 function App() {
 
+  const accesstoken = localStorage.getItem("token")
+  console.log(accesstoken)
+  const dispatch = useDispatch()
+  
+  useEffect(()=>{
 
+    
+    if (accesstoken) {
+      
+      axios
+        .get("http://localhost:8000/api/userprofile/", {
+          headers: {
+            authorization: `bearer ${accesstoken}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          dispatch(setUserDetails(res.data));
+        })
+        .catch((err) => console.log(err));
+    }
+  
+
+
+
+
+  },[])
 
   return (
     <>

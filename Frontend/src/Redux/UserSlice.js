@@ -11,11 +11,16 @@ export const UserSlice = createSlice({
     setUserDetails: (state, action) => {
       state.value = action.payload
      },
+     logoutUser :(state) => {
+      state.value = null
+      localStorage.removeItem("token")
+       
+     }
    
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUserDetails } = UserSlice.actions
+export const { setUserDetails, logoutUser } = UserSlice.actions
 
 export default UserSlice.reducer

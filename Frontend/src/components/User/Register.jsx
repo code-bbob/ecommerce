@@ -38,7 +38,7 @@ export function Login() {
           draggable: false,
           theme: "light",
         });
-        // dispatch(setUserDetails(res.data.))
+        dispatch(setUserDetails(res.data.userDetails))
         localStorage.setItem("token",res.data.token.access)
         navigate("/")
 
@@ -54,6 +54,7 @@ export function Login() {
 
   return (
     <>
+      <ToastContainer/>
       <div>
         <div className="w-fit m-auto my-10">
           <div className="border border-gray-400 py-10 px-10 rounded-3xl">
