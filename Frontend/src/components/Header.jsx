@@ -8,11 +8,13 @@ import { IoIosArrowDropdownCircle } from "react-icons/io";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Home } from "./Home";
+import { Outlet } from "react-router-dom";
 
 export function HeaderTop() {
   return (
+    <>
     <div className="bg-black text-white flex justify-between px-3 pt-2">
-  <p className="hover:text-gray-400">Customer Service: </p>
+  <p className="hover:text-gray-400">Customer Service: 9803300305</p>
   <div className="flex items-center gap-4">
     <ul className="flex items-center gap-1">
       <li>
@@ -33,7 +35,7 @@ export function HeaderTop() {
   </div>
 </div>
 
-    
+  </>
   );
 }
 
@@ -104,6 +106,9 @@ export function HeaderMid() {
         </div>
         
         <ul className="flex gap-5 font-semibold items-center">
+          <Link className="no-underline text-black" to="/blog">
+          <li>Blogs</li>
+          </Link>
           <li>Compare</li>
           <li className="flex items-center gap-1">
             <FaRegHeart />
@@ -219,7 +224,7 @@ export function HeaderBottom() {
 
         
       </div>
-      
+      <Outlet/>
     </>
   );
 }
