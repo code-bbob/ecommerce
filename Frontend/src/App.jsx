@@ -62,11 +62,11 @@ function App() {
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/products" >
             <Route path=':id' element={<SingleProduct/>}/>
+            <Route path={`/products/search/:search`} element={<SearchedProductsCategory/>}/>
          </Route>
          </Route>
           <Route path="/blog" >
             <Route path=':id' element={<SingleBlog/>}>
-            <Route path={`/products/search/:search`} element={<SearchedProductsCategory/>}/>
              </Route>
 
         </Route>

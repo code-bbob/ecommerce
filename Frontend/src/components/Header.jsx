@@ -6,7 +6,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Home } from "./Home";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
@@ -294,7 +294,7 @@ export function HeaderBottom() {
           </ul>
         </nav>
       </div>
-      
+      <Outlet/>
     </>
   );
 }
