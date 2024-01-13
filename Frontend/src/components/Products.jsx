@@ -15,7 +15,6 @@ export function Products(){
         .then((res)=>{
           setProducts(res.data)
           console.log(res.data)
-    
           
         })
         .catch((err)=>{
@@ -77,14 +76,14 @@ export function Blogs(){
   return (
   
     <>
-    <div className="flex p-5 gap-5">
+    <div className="flex p-5 gap-5 mb-10">
     {
 
 blogs.map((blog,i)=>{
   return (
     <>
    
-    <div onClick={()=>{
+    <div key={i} onClick={()=>{
       navigate(`/blog/${blog.id}`)
       
     }}

@@ -6,6 +6,7 @@ import { Login, Signup } from './components/User/Register'
 import { HeaderBottom, HeaderMid, HeaderTop } from './components/Header'
 import { Home } from './components/Home'
 import { SingleProduct } from './components/Products/SingleProduct'
+import { SingleBlog } from './components/Blogs/singleblog'
 import { SearchedProductsCategory } from './components/Products/SearchedProductsCategory'
 import { useDispatch } from 'react-redux'
 import { setUserDetails } from './Redux/UserSlice'
@@ -45,17 +46,29 @@ function App() {
   return (
     <>
     
-      <HeaderTop/>
-      <HeaderMid/>
-      <HeaderBottom/>
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/signup" element={<Signup/>}/>
-        <Route path="/products" >
-          <Route path=':id' element={<SingleProduct/>}/> 
-          <Route path={`/products/search/:search`} element={<SearchedProductsCategory/>}/>
-          
+      
+            
+    <Routes>
+        <Route element={
+      <>
+        <HeaderTop />
+        <HeaderMid />
+        <HeaderBottom />
+      </>
+    }
+    >
+          <Route path="/" element={<Home/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/signup" element={<Signup/>}/>
+          <Route path="/products" >
+            <Route path=':id' element={<SingleProduct/>}/>
+            <Route path={`/products/search/:search`} element={<SearchedProductsCategory/>}/>
+         </Route>
+         </Route>
+          <Route path="/blog" >
+            <Route path=':id' element={<SingleBlog/>}>
+             </Route>
+
         </Route>
         
 
