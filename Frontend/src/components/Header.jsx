@@ -44,9 +44,12 @@ export function HeaderMid() {
   const [query,setQuery] = useState("") 
   const [products,setProducts] = useState([])
 
+
+
+  const URL = "http://localhost:8000/shop/api/"
   useEffect ( ()=> {
         
-    axios.get("http://localhost:8000/shop/api/")
+    axios.get(URL)
     .then((res)=>{
       setProducts(res.data)
       console.log("products from api",products)
@@ -56,7 +59,24 @@ export function HeaderMid() {
       console.log(err)
     })
   },[])
+
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleClick();
+    }
+  };
   
+  const handleClick = ()=>{
+    
+    
+    navigate(`/products/search/${query}`)
+    
+  }
+
+
+
+
   function handleQuery(e){
     setQuery(e.target.value)
     setSearched(true)
@@ -78,11 +98,15 @@ export function HeaderMid() {
         <div className="flex justify-between items-center border rounded-md w-80 ">
           <input
             onChange={(e)=>handleQuery(e)}
+            onKeyPress={handleKeyPress}
             className="outline-none w-full p-2"
             type="search"
             placeholder="Search Your Products Here"
           />
+          <button  onClick={handleClick}>
+
           <FaSearch className="bg-orange-400 h-10 w-8 p-1 hover:bg-orange-600" />
+          </button>
         </div>
         {
 

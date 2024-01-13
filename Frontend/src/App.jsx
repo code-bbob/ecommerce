@@ -6,6 +6,7 @@ import { Login, Signup } from './components/User/Register'
 import { HeaderBottom, HeaderMid, HeaderTop } from './components/Header'
 import { Home } from './components/Home'
 import { SingleProduct } from './components/Products/SingleProduct'
+import { SearchedProductsCategory } from './components/Products/SearchedProductsCategory'
 // index.js or App.js
 
 
@@ -24,9 +25,11 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/products" >
-          <Route path=':id' element={<SingleProduct/>}> </Route>
-
+          <Route path=':id' element={<SingleProduct/>}/> 
+          <Route path={`/products/search/:search`} element={<SearchedProductsCategory/>}/>
+          
         </Route>
+        
 
       </Routes>
       
