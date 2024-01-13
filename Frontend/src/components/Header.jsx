@@ -161,14 +161,12 @@ export function HeaderBottom() {
                 <>
                   <div 
 >
-                    <ul  onMouseEnter={() => handleMouseEnter(i)}
+                    <ul onMouseEnter={() => handleMouseEnter(i)}
                     className="flex items-center gap-2">
 
                     
                     <li 
                       key={i}
-                     
-                      
                       className=" z-10	text-white text-lg flex items-center gap-3 cursor-pointer "
                       style={{ position: "relative" }}
                     >
@@ -178,7 +176,8 @@ export function HeaderBottom() {
                           className=" z-10	absolute  shadow rounded-md w-fit px-4 py-2 bg-slate-300"
                           style={{ top: "36px" }}
                         >
-                          <ul className="">
+                          <ul
+                            className="">
                     
                             {products
                               .filter(
@@ -193,7 +192,7 @@ export function HeaderBottom() {
                                         {product.brandName} 
                                       </h1>
                                       {
-                                        products.filter((prod)=> prod.brandName === product.brandName )
+                                        products.filter((prod)=> prod.brandName === product.brandName && prod.category === product.category )
                                         .map((product, k)=> (
                                           <li className="text-gray-500 z-10	" key={k}>{product.productName}</li>
                                         )

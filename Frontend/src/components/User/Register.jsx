@@ -1,45 +1,65 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { MdAlternateEmail } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import toast, { Toaster } from "react-hot-toast";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../../Redux/UserSlice";
 
+const Url = "http://localhost:8000/";
 
+export function Login() {
 
-export function Login(){
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [isVisible, setIsVisible] = useState(false);
+  const [password, setPassword] = useState("");
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    axios
+      .post("http://localhost:8000/userauth/api/login/", {
+        email: e.target.email.value,
+        password: e.target.password.value,
+      })
 
-    const [isVisible, setIsVisible] = useState(false);
-    const [password, setPassword] = useState("");
+      .then((res) => {
+        console.log(res);
+        toast.success("Logged in successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          theme: "light",
+        });
+        // dispatch(setUserDetails(res.data.))
+        localStorage.setItem("token",res.data.token.access)
+        navigate("/")
 
-    function clickEyeButton() {
-        setIsVisible((prevVisible) => !prevVisible);
-      }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
+  function clickEyeButton() {
+    setIsVisible((prevVisible) => !prevVisible);
+  }
 
-    function handleSubmit(e){
-        e.preventDefault()
-
-    }
-
-
-
-
-
-    return (
-        <>
-        
-        <div>
-          <div className="w-fit m-auto my-10">
-            <div className="border border-gray-400 py-10 px-10 rounded-3xl">
-            <form  onSubmit={(e)=>handleSubmit(e)}
-              action="#"
-            >
+  return (
+    <>
+      <div>
+        <div className="w-fit m-auto my-10">
+          <div className="border border-gray-400 py-10 px-10 rounded-3xl">
+            <form onSubmit={(e) => handleSubmit(e)} action="#">
               <p className="text-3xl font-medium text-center">Login</p>
-              
+
               <div className="flex border items-center p-2 px-4 rounded-3xl my-4">
                 <input
                   type="email"
@@ -69,7 +89,7 @@ export function Login(){
                   </button>
                 )}
               </div>
-                 
+
               <div className="flex justify-between">
                 <label>
                   <input type="checkbox" />
@@ -77,8 +97,10 @@ export function Login(){
                 </label>
                 <p>Forget Password?</p>
               </div>
-              <button type="submit"
-               className="w-full bg-primary rounded-3xl my-4 p-2 font-bold text-white text-xl hover:bg-hover">
+              <button
+                type="submit"
+                className="w-full bg-primary rounded-3xl my-4 p-2 font-bold text-white text-xl hover:bg-hover"
+              >
                 Login
               </button>
               <div className="flex justify-center">
@@ -88,43 +110,65 @@ export function Login(){
                 </p>
               </div>
             </form>
-            </div>
           </div>
         </div>
-    
-        
-        </>
-    )
+      </div>
+    </>
+  );
 }
-export function Signup(){
+export function Signup() {
+  const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-    const [isVisible, setIsVisible] = useState(false);
-    const [password, setPassword] = useState("");
+  function clickEyeButton() {
+    setIsVisible((prevVisible) => !prevVisible);
+  }
 
-    function clickEyeButton() {
-        setIsVisible((prevVisible) => !prevVisible);
-      }
+  function handleSubmit(e) {
+    e.preventDefault();
 
+    if (e.target.password.value === e.target.repeat_password.value) {
+      axios
+        .post("http://localhost:8000/userauth/api/register/", {
+          name: e.target.name.value,
+          email: e.target.email.value,
+          password: e.target.password.value,
+          password2: e.target.password2.value,
+        })
 
-    function handleSubmit(e){
-        e.preventDefault()
-
+        .then((res) => {
+          console.log(res);
+          toast.success("User Created Successfully");
+          navigate("/");
+          // localStorage.setItem("token",token)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setError("Password donot match");
     }
+  }
 
-
-
-    return (
-        <>
-         <div>
-          <div className="w-fit m-auto my-10">
-            <div className="border border-gray-400 py-10 px-10 rounded-3xl">
-            <form  onSubmit={(e)=>handleSubmit(e)}
-              action="#"
-            >
+  return (
+    <>
+      <ToastContainer />
+      <div>
+        <div className="w-fit m-auto my-10">
+          <div className="border border-gray-400 py-10 px-10 rounded-3xl">
+            <form onSubmit={(e) => handleSubmit(e)} action="#">
               <p className="text-3xl font-medium text-center">Signup</p>
-              
+
               <div className="flex border items-center p-2 px-4 rounded-3xl my-4">
-              <input type="username" name="username" required placeholder="enter your Username" className="w-72 outline-none" />
+                <input
+                  type="username"
+                  name="name"
+                  required
+                  placeholder="enter your Username"
+                  className="w-72 outline-none"
+                />
                 <FaUser />
               </div>
               <div className="flex border items-center p-2 px-4 rounded-3xl my-4">
@@ -156,19 +200,19 @@ export function Signup(){
                   </button>
                 )}
               </div>
-              <div className="flex border items-center p-2 px-4 rounded-3xl my-4">
+              <div className="flex border items-center p-2 px-4 rounded-3xl mt-4 mb-1">
                 <input
                   type="password"
-                  name="repeat_password"
+                  name="password2"
                   placeholder="repeat-password"
                   required
                   className="w-72 outline-none "
-                  
                 />
-                 <FaLock />
-               </div>
-             
-              <div className="flex flex-col items-start">
+                <FaLock />
+              </div>
+              {error && <p className="text-red-400 text-sm px-3">**{error}</p>}
+
+              {/* <div className="flex flex-col items-start">
                 <label
                   htmlFor="image"
                   className=" px-3"
@@ -187,8 +231,8 @@ export function Signup(){
                   />
                 </div>
                 <small className="text-red-800"></small>
-              </div>
-    
+              </div> */}
+
               <div className="flex justify-between">
                 <label>
                   <input type="checkbox" />
@@ -196,8 +240,10 @@ export function Signup(){
                 </label>
                 <p>Forget Password?</p>
               </div>
-              <button type="submit"
-               className="w-full bg-primary rounded-3xl my-4 p-2 font-bold text-white text-xl hover:bg-hover">
+              <button
+                type="submit"
+                className="w-full bg-primary rounded-3xl my-4 p-2 font-bold text-white text-xl hover:bg-hover"
+              >
                 Signup
               </button>
               <div className="flex justify-center">
@@ -207,10 +253,9 @@ export function Signup(){
                 </p>
               </div>
             </form>
-            </div>
           </div>
         </div>
-    
-         </>
-      )
+      </div>
+    </>
+  );
 }
