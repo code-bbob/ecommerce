@@ -56,52 +56,48 @@ export function Products(){
 
 export function Blogs(){
 
+
+  const navigate = useNavigate()
+    const [blogs, setBlogs] = useState([])
+    useEffect ( ()=> {
+        
+
+        axios.get("http://localhost:8000/blog/api/")
+        .then((res)=>{
+          setBlogs(res.data)
+          console.log(res.data)
+    
+          
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      },[])
+
   return (
   
     <>
     <div className="flex p-5 gap-5">
-      <div className="bg-white p-7 rounded-lg">
-        <img src="" alt="oop" />
-        <p className="p-0 m-0">Blogs for Laptops</p>
-        <p></p>
-        <button className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full">Vie Blogs</button>
+    {
 
-
-      </div>
-      <div className="bg-white p-7 rounded-lg">
-        <img src="" alt="oop" />
-        <p className="p-0 m-0">Blogs for Laptops</p>
-        <p></p>
-        <button className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full">Vie Blogs</button>
-
-
-      </div>
-      <div className="bg-white p-7 rounded-lg">
-        <img src="" alt="oop" />
-        <p className="p-0 m-0">Blogs for Laptops</p>
-        <p></p>
-        <button className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full">Vie Blogs</button>
-
-
-      </div>
-      <div className="bg-white p-7 rounded-lg">
-        <img src="" alt="oop" />
-        <p className="p-0 m-0">Blogs for Laptops</p>
-        <p></p>
-        <button className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full">Vie Blogs</button>
-
-
-      </div>
-      <div className="bg-white p-7 rounded-lg">
-        <img src="" alt="oop" />
-        <p className="p-0 m-0">Blogs for Laptops</p>
-        <p></p>
-        <button className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full">Vie Blogs</button>
-
-
-      </div>
-     
+blogs.map((blog,i)=>{
+  return (
+    <>
+   
+    <div onClick={()=>{
+      navigate(`/blog/${blog.id}`)
       
+    }}
+      className="bg-white p-3">
+      <img className="h-40 w-40 my-3 mx-auto" src={blog.image} alt="img" />
+      <p className="p-0 m-0">{blog.title} by {blog.author}</p>
+      <p>{blog.content}</p>
+    </div>
+    </>
+  )
+  
+})
+}
     </div>
     </>
 
