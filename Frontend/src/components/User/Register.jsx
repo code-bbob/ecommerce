@@ -36,7 +36,7 @@ export function Login() {
           closeOnClick: true,
           pauseOnHover: false,
           draggable: false,
-          theme: "light",
+          theme: "dark",
         });
         dispatch(setUserDetails(res.data.userDetails))
         localStorage.setItem("token",res.data.token.access)

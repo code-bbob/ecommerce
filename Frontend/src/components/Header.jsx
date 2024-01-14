@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { PiSignInBold } from "react-icons/pi";
 import { FaSearch } from "react-icons/fa";
@@ -11,6 +11,10 @@ import { Home } from "./Home";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { logoutUser } from "../Redux/UserSlice";
+import { Fragment } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { removeFromCart } from "../Redux/CartSlice";
 
 export function HeaderTop() {
   const dispatch = useDispatch();
@@ -35,63 +39,71 @@ export function HeaderTop() {
   console.log("userdetbybest", userDetails);
   return (
     <>
-    <ToastContainer/>
-    <div className="bg-black text-white flex justify-between px-3 pt-2">
-      <p className="hover:text-gray-400">Customer Service: </p>
-      <div className="flex items-center gap-4">
-        <ul className="flex items-center gap-1">
-          <li>
-            <Link
-              to="/login"
-              className="flex items-center gap-2 no-underline text-white hover:text-gray-400"
-            >
-              <FaUser />
-              {userDetails ? (
-                <span>{userDetails.name}</span>
-              ) : (
-                <span>Login</span>
-              )}
-            </Link>
-          </li>
-        </ul>
-        <ul className="flex items-center gap-1">
-          <li>
-          {userDetails ? (
-                <>
-            <Link
-              to="/"
-              onClick={handleLogout}
-              className="flex items-center gap-2 no-underline text-white hover:text-gray-400"
-            >
-              <PiSignInBold />
-                <span>Logout</span>
-            </Link>
-            </> ): (
-              <>
+      <ToastContainer />
+      <div className="bg-black text-white flex justify-between px-3 pt-2">
+        <p className="hover:text-gray-400">Customer Service: </p>
+        <div className="flex items-center gap-4">
+          <ul className="flex items-center gap-1">
+            <li>
               <Link
-              to="/signup"
-              className="flex items-center gap-2 no-underline text-white hover:text-gray-400"
-            >
-              <PiSignInBold />
-                <span>Sign up</span>
-            </Link>
-
-              </>
-            )
-            }
-          </li>
-        </ul>
+                to="/login"
+                className="flex items-center gap-2 no-underline text-white hover:text-gray-400"
+              >
+                <FaUser />
+                {userDetails ? (
+                  <span>{userDetails.name}</span>
+                ) : (
+                  <span>My account</span>
+                )}
+              </Link>
+            </li>
+          </ul>
+          <ul className="flex items-center gap-1">
+            <li>
+              {userDetails ? (
+                <>
+                  z
+                  <Link
+                    to="/"
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 no-underline text-white hover:text-gray-400"
+                  >
+                    <PiSignInBold />
+                    <span>Logout</span>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/signup"
+                    className="flex items-center gap-2 no-underline text-white hover:text-gray-400"
+                  >
+                    <PiSignInBold />
+                    <span>Sign in</span>
+                  </Link>
+                </>
+              )}
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </>
+    </>
   );
 }
 
 export function HeaderMid() {
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch()
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const navigate = useNavigate();
   const [searched, setSearched] = useState(false);
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]);
+
+  let totalPrice = 0;
+  cartItems.forEach((element) => {
+    totalPrice += element.price;
+  });
 
   const URL = "http://localhost:8000/shop/api/";
   useEffect(() => {
@@ -179,11 +191,165 @@ export function HeaderMid() {
             <FaRegHeart />
             My wishlist
           </li>
-          <li className="flex items-center gap-1">
-            <FaShoppingCart />
-            Add to Cart
+          <li
+            onClick={() => {
+              setOpen(true);
+              // navigate("/checkout/carts")
+            }}
+            className="flex items-center gap-1 hover:cursor-pointer relative"
+          >
+            <span className="absolute -top-3 left-6 text-sm font-bold">
+              ({cartItems.length})
+            </span>
+            <FaShoppingCart size={25} color="brown" className="mr-3" />
+            Shopping Cart
           </li>
         </ul>
+
+        <Transition.Root show={open} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={setOpen}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-in-out duration-500"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in-out duration-500"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 overflow-hidden">
+              <div className="absolute inset-0 overflow-hidden">
+                <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="transform transition ease-in-out duration-500 sm:duration-700"
+                    enterFrom="translate-x-full"
+                    enterTo="translate-x-0"
+                    leave="transform transition ease-in-out duration-500 sm:duration-700"
+                    leaveFrom="translate-x-0"
+                    leaveTo="translate-x-full"
+                  >
+                    <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
+                      <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                        <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                          <div className="flex items-start justify-between">
+                            <Dialog.Title className="text-lg font-medium text-gray-900">
+                              Shopping cart
+                            </Dialog.Title>
+                            <div className="ml-3 flex h-7 items-center">
+                              <button
+                                type="button"
+                                className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+                                onClick={() => setOpen(false)}
+                              >
+                                <span className="absolute -inset-0.5" />
+                                <span className="sr-only">Close panel</span>
+                                <XMarkIcon
+                                  className="h-6 w-6"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="mt-8">
+                            <div className="flow-root">
+                              <ul
+                                role="list"
+                                className="-my-6 divide-y divide-gray-200"
+                              >
+                                {cartItems?.map((cartItems) => (
+                                  <li
+                                    key={cartItems.productId}
+                                    className="flex py-6"
+                                  >
+                                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                      <img
+                                        src={cartItems.image}
+                                        alt={cartItems.imageAlt}
+                                        className="h-full w-full object-cover object-center"
+                                      />
+                                    </div>
+
+                                    <div className="ml-4 flex flex-1 flex-col">
+                                      <div>
+                                        <div className="flex justify-between text-base font-medium text-gray-900">
+                                          <h3>
+                                            <a href={cartItems.href}>
+                                              {cartItems.productName}
+                                            </a>
+                                          </h3>
+                                          <p className="ml-4">
+                                            Rs. {cartItems.price}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div className="flex flex-1 items-end justify-between text-sm">
+                                        <p className="text-gray-500">
+                                          Qty {cartItems.quantity}
+                                        </p>
+
+                                        <div className="flex">
+                                          <button
+                                            onClick={()=>{
+                                              dispatch(removeFromCart(cartItems))
+                                            }}
+                                            type="button"
+                                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                          <div className="flex justify-between text-base font-medium text-gray-900">
+                            <p>Subtotal</p>
+                            <p>Rs. {totalPrice}</p>
+                          </div>
+                          <p className="mt-0.5 text-sm text-gray-500">
+                            Shipping and taxes calculated at checkout.
+                          </p>
+                          <div className="mt-6">
+                            <a
+                              href="#"
+                              className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                            >
+                              Checkout
+                            </a>
+                          </div>
+                          <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
+                            <p>
+                              or{" "}
+                              <button
+                                type="button"
+                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                                onClick={() => setOpen(false)}
+                              >
+                                Continue Shopping
+                                <span aria-hidden="true"> &rarr;</span>
+                              </button>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
       </div>
     </>
   );
