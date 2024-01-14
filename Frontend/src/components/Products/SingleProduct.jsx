@@ -7,9 +7,13 @@ import { IoIosStarOutline } from "react-icons/io";
 import { FaRegCheckSquare } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { ToastContainer, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setToCart } from "../../Redux/CartSlice";
 
 
 export function SingleProduct() {
+  const dispatch = useDispatch()
   const [product, setProduct] = useState({});
   const params = useParams();
   const productId = params.id;
@@ -39,6 +43,7 @@ export function SingleProduct() {
   console.log("pr", product);
   return (
     <>
+    <ToastContainer/>
       <div className="bg-gray-300 p-7 my-5">
         <div className="flex  gap-7">
           <div className="bg-white h-100% w-40 "></div>
@@ -85,7 +90,20 @@ export function SingleProduct() {
                   <FaArrowUp className=" text-gray-600" />
                 </div>
               </div>
-              <button className="px-4 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg mx-3">Add to Cart</button>
+              <button onClick={() => {
+                    console.log("here");
+                    dispatch(setToCart(product[0]));
+                    toast.success(`${product[0].productName} added to Cart`, {
+                      position: "top-right",
+                      autoClose: 2000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: false,
+                      draggable: false,
+                      theme: "dark",
+                    });
+                  }}
+              className="px-4 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg mx-3">Add to Cart</button>
               <button className="border bg-white hover:bg-orange-300 px-2 ">
                 <CiHeart />
               </button>

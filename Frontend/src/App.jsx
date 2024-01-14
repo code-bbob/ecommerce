@@ -9,6 +9,7 @@ import { SingleProduct } from './components/Products/SingleProduct'
 import { SearchedProductsCategory } from './components/Products/SearchedProductsCategory'
 import { useDispatch } from 'react-redux'
 import { setUserDetails } from './Redux/UserSlice'
+// import { Cart } from './components/ShoppingCart/Cart'
 // index.js or App.js
 
 
@@ -52,6 +53,7 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
+        {/* <Route path="/checkout/carts" element={<Cart/>}/> */}
         <Route path="/products" >
           <Route path=':id' element={<SingleProduct/>}/> 
           <Route path={`/products/search/:search`} element={<SearchedProductsCategory/>}/>
