@@ -49,7 +49,7 @@ export function HeaderTop() {
               {userDetails ? (
                 <span>{userDetails.name}</span>
               ) : (
-                <span>My account</span>
+                <span>Login</span>
               )}
             </Link>
           </li>
@@ -73,7 +73,7 @@ export function HeaderTop() {
               className="flex items-center gap-2 no-underline text-white hover:text-gray-400"
             >
               <PiSignInBold />
-                <span>Sign in</span>
+                <span>Sign up</span>
             </Link>
 
               </>
