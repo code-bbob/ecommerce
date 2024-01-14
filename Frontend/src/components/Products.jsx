@@ -90,30 +90,28 @@ export function Blogs() {
 
   return (
     <>
-      <div className="flex p-5 gap-5">
-        {blogs.map((blog, i) => {
-          return (
-            <>
-              <div
-                onClick={() => {
-                  navigate(`/blog/${blog.id}`);
-                }}
-                className="bg-white p-3"
-              >
-                <img
-                  className="h-40 w-40 my-3 mx-auto"
-                  src={blog.image}
-                  alt="img"
-                />
-                <p className="p-0 m-0">
-                  {blog.title} by {blog.author}
-                </p>
-                <p>{blog.content}</p>
-              </div>
-            </>
-          );
-        })}
-      </div>
+    <div className="flex p-5 gap-5 mb-10">
+    {
+
+blogs.map((blog,i)=>{
+  return (
+    <>
+   
+    <div key={i} onClick={()=>{
+      navigate(`/blog/${blog.id}`)
+      
+    }}
+      className="bg-white p-3">
+      <img className="h-40 w-40 my-3 mx-auto" src={blog.image} alt="img" />
+      <p className="p-0 m-0">{blog.title} by {blog.author}</p>
+      <p>{blog.content}</p>
+    </div>
+    </>
+  )
+  
+})
+}
+    </div>
     </>
   );
 }

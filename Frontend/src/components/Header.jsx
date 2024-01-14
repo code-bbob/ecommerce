@@ -6,7 +6,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Home } from "./Home";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
@@ -183,6 +183,9 @@ export function HeaderMid() {
         </div>
 
         <ul className="flex gap-5 font-semibold items-center">
+          <Link className="no-underline text-black" to="/blog">
+          <li>Blogs</li>
+          </Link>
           <li>Compare</li>
           <li className="flex items-center gap-1">
             <FaRegHeart />
@@ -457,6 +460,7 @@ export function HeaderBottom() {
           </ul>
         </nav>
       </div>
+      <Outlet/>
     </>
   );
 }
