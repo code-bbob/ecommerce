@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 from django.conf import settings
+from django.utils import timezone
 # Create your models here.
 
 class Product(models.Model):
@@ -12,7 +13,7 @@ class Product(models.Model):
     series = models.CharField(max_length=50, default='')   
     price = models.IntegerField(default=0)
     desc= models.CharField(max_length=400)
-    pubDate = models.DateField()
+    pubDate = models.DateField(default=timezone.now)
     image=models.ImageField(upload_to='shop/images', default='')
 
     def __str__(self):
