@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, Dummy
+from .models import Order
 
 class OrderSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()

@@ -8,8 +8,3 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, related_name='orders')
 
-class Dummy(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='dummy', on_delete=models.CASCADE, default='')
-    name=models.CharField(max_length=100)
-    age=models.IntegerField()
-    sth=models.CharField(max_length=100)
