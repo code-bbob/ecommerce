@@ -24,6 +24,7 @@ urlpatterns = [
     path('shop/', include('shop.urls')),
     path('blog/', include('blog.urls')),
     path('userauth/', include('userauth.urls')),
+    path('cart/', include('cart.urls'))
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 #added to custom media static files
