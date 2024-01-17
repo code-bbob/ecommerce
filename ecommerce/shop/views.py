@@ -3,7 +3,7 @@ from .models import Product,Comment
 from math import ceil
 from django.contrib import messages 
 from django.http import HttpResponse
-from .serializers import ProductSerializer, UserSerializer, CommentSerializer, ReplySerializer
+from .serializers import ProductSerializer, CommentSerializer, ReplySerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import filters

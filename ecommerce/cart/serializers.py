@@ -1,15 +1,14 @@
 from rest_framework import serializers
-from .models import Order
+from .models import Order, Dummy
 
 class OrderSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
-        fields = ['order_number', 'products']
+        fields = '__all__'
 
     def get_products(self, obj):
-        # Assuming 'products' is a ManyToManyField in the Order model
         products_queryset = obj.products.all()
 
         # Include product details with id, name, and price
@@ -17,5 +16,5 @@ class OrderSerializer(serializers.ModelSerializer):
             {'id': product.productId, 'name': product.productName, 'price': product.price}
             for product in products_queryset
         ]
-
+        print(products_data)
         return products_data

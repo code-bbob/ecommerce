@@ -31,9 +31,8 @@ class Comment(models.Model):
         return self.text
 
 
-class Replies(models.Model):
+class Repliess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)#very important is related name
     text = models.CharField(max_length=100)
     pubDate = models.DateField(auto_now_add=True)
-
