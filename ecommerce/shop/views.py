@@ -64,6 +64,13 @@ class CatSearch(generics.ListAPIView):
             queryset = Product.objects.filter(category__iexact=cat)
     
         return queryset
+    
+class SubcatSearch(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['price']
+    search_fields = ['series']
 
 class CatBrandSearch(generics.ListAPIView):
     serializer_class = ProductSerializer
