@@ -1,20 +1,31 @@
 from rest_framework import serializers
-from .models import Order
+from .models import Order, OrderItem
+from shop.models import Product
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())  # Adjust queryset based on your Product model
+
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'product', 'quantity']
 
 class OrderSerializer(serializers.ModelSerializer):
-    products = serializers.SerializerMethodField()
+    order_items = OrderItemSerializer(many=True, read_only=True)
+    user = serializers.SerializerMethodField() 
 
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['id', 'orderNumber', 'user', 'created_at', 'updated_at', 'order_items']
 
-    def get_products(self, obj):
-        products_queryset = obj.products.all()
+    def get_user(self, obj):
+        return obj.user.name
 
-        # Include product details with id, name, and price
-        products_data = [
-            {'id': product.productId, 'name': product.productName, 'price': product.price}
-            for product in products_queryset
-        ]
-        print(products_data)
-        return products_data
+    def create(self, validated_data):
+        order_items_data = validated_data.pop('order_items', [])
+        order = Order.objects.create(**validated_data)
+
+        for order_item_data in order_items_data:
+            OrderItem.objects.create(order=order, **order_item_data)
+
+        return order
+    
