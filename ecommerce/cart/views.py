@@ -6,6 +6,8 @@ from .serializers import OrderSerializer, OrderItemSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class OrderAPIView(APIView):
+    permission_classes=[IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         orders = Order.objects.all()
         serializer = OrderSerializer(orders, many=True)
@@ -42,13 +44,15 @@ class OrderAPIView(APIView):
             for order_item_data in order_items_data:
                 product_id = order_item_data.get('product')
                 quantity = order_item_data.get('quantity')
-
+                if (quantity == 0):
+                    OrderItem.objects.filter(order=order, product_id=product_id).delete()
+                else:   
                 # Get or create an existing order item based on product_id
-                order_item, created = OrderItem.objects.get_or_create(order=order, product_id=product_id)
+                    order_item, created = OrderItem.objects.get_or_create(order=order, product_id=product_id)
 
-                # Update the quantity
-                order_item.quantity = quantity
-                order_item.save()
+                    # Update the quantity
+                    order_item.quantity = quantity
+                    order_item.save()
 
             return Response({'detail': 'Order items updated successfully.'})
         else:
