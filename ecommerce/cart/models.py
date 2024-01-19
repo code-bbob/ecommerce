@@ -1,12 +1,12 @@
 from django.db import models
 from django.conf import settings
 import uuid
-
+from django.utils import timezone
 class Order(models.Model):
     orderNumber = models.UUIDField(default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.orderNumber} by {self.user}"
