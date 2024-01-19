@@ -43,6 +43,16 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
+      # Include groups if needed
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        related_name="user_set",
+        related_query_name="user",
+    )
+
     objects = UserManager()
 
     USERNAME_FIELD = "email"
