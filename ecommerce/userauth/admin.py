@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import UserAdmin as UserAdmin
 from .models import User
 
-class UserModelAdmin(BaseUserAdmin):
+class UserModelAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
@@ -11,7 +11,7 @@ class UserModelAdmin(BaseUserAdmin):
     fieldsets = [
         (None, {"fields": ["email", "password"]}),
         ("Personal info", {"fields": ["name"]}),
-        ("Permissions", {"fields": ["is_admin", "is_staff", "groups"]}),
+        ("Permissions", {"fields": ["is_admin", "is_staff","groups","user_permissions"]}),
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -20,8 +20,8 @@ class UserModelAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ["wide"],
-                "fields": ["email", "name", "password1", "password2", "groups"],
-            },
+                "fields": ["email", "name", "password1", "password2"]
+            }
         ),
     ]
     search_fields = ["email"]
