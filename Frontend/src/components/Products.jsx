@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setToCart } from "../Redux/CartSlice";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 export function Products() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userDetails = useSelector((state)=>state.user.value)
   const [products, setProducts] = useState([]);
   useEffect(() => {
     axios
@@ -20,6 +21,39 @@ export function Products() {
         console.log(err);
       });
   }, []);
+
+
+  function handleCart(prod){
+    
+    const singleprod = [prod]
+    if(userDetails){
+      dispatch(setToCart(singleprod))
+      // axios.post to post in backend with userDetails and prod details
+       
+      
+    }
+    else{
+      console.log("here and")
+      dispatch(setToCart(singleprod));
+    const existingCartItemsJSON = localStorage.getItem("cart-items");
+    const existingCartItems = existingCartItemsJSON ? JSON.parse(existingCartItemsJSON) : [];
+    const updatedCartItems = [...existingCartItems,...singleprod];
+    const updatedCartItemsJSON = JSON.stringify(updatedCartItems);
+    localStorage.setItem("cart-items",updatedCartItemsJSON)
+
+
+
+    toast.success(`${prod.productName} added to Cart`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: false,
+      theme: "dark",
+    });
+  }
+  }
 
   return (
     <>
@@ -47,19 +81,7 @@ export function Products() {
                   <p>Price Nrs:{prod.price}</p>
                 </div>
                 <button
-                  onClick={() => {
-                    console.log("here");
-                    dispatch(setToCart(prod));
-                    toast.success(`${prod.productName} added to Cart`, {
-                      position: "top-right",
-                      autoClose: 2000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: false,
-                      draggable: false,
-                      theme: "dark",
-                    });
-                  }}
+                  onClick={()=> {handleCart(prod)}}
                   className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full"
                 >
                   Add To Cart

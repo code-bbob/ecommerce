@@ -16,7 +16,6 @@ const queryClient = new QueryClient();
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
       <Provider store={store}>
 
       <BrowserRouter>
@@ -24,7 +23,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <App />
         </QueryClientProvider>
       </BrowserRouter>
-      </Provider>
-    </React.StrictMode>,
+      </Provider>,
     document.getElementById('root')
   );
