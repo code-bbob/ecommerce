@@ -21,6 +21,10 @@ export function HeaderBlog() {
       });
   }, []);
 
+  const mblogs = [...new Set(blog?.map((blogs) => blogs.category))]; 
+  console.log("mblogs",mblogs)
+
+
   return (
     <>
 
@@ -80,10 +84,10 @@ export function HeaderBlog() {
         <div className="w-full flex-grow sm:flex sm:items-center sm:w-auto">
             <div className="w-full container mx-auto flex flex-col sm:flex-row items-center justify-center text-sm font-bold uppercase mt-0 px-6 py-2">
                 {
-                blog.map((b)=>(
+                mblogs.map((b)=>(
                     <div key={b.id} onClick={() => {
-                        navigate(`/blog/cat/${b.category}`);
-                      }} className="hover:bg-gray-400 no-underline text-black hover:underline rounded py-2 px-4 mx-2">{b?.category}</div>
+                        navigate(`/blog/cat/${b}`);
+                      }} className="hover:bg-gray-400 no-underline text-black hover:underline rounded py-2 px-4 mx-2">{b}</div>
                 ))
             }
                 

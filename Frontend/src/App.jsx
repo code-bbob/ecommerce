@@ -13,7 +13,9 @@ import { setUserDetails } from './Redux/UserSlice'
 import { HeaderBlog } from './components/Blogs/blogHeader'
 import { BlogsView } from './components/Blogs/blogs'
 import { CategoryBlog } from './components/Blogs/catblog'
+import { BlogPost } from './components/Blogs/BlogPost'
 import { setToCart } from './Redux/CartSlice'
+
 // index.js or App.js
 
 
@@ -95,13 +97,12 @@ if (cartItems && Array.isArray(cartItems)) {
           <Route path ='' element={<BlogsView/>}/>
             <Route path=':id' element={<SingleBlog/>}/>
             <Route path='cat/:cat' element = {<CategoryBlog/>}/>
-
-            
+            <Route path='post' element = {<BlogPost/>}/>
 
         </Route>
+      </Routes>
         
 
-      </Routes>
       
     
    
