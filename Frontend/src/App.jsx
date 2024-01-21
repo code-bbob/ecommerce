@@ -48,7 +48,7 @@ function App() {
 const cartItemsStr = localStorage.getItem("cart-items");
 let cartItems = [];
 
-try {
+try { 
   // Parse the JSON string to an array
   cartItems = JSON.parse(cartItemsStr) || [];
 } catch (error) {
