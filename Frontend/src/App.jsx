@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
-import { Route, Routes } from 'react-router'
+import { Route, Routes, json } from 'react-router'
 import { Login, Signup } from './components/User/Register'
 import { HeaderBottom, HeaderMid, HeaderTop } from './components/Header'
 import { Home } from './components/Home'
@@ -14,11 +14,14 @@ import { HeaderBlog } from './components/Blogs/blogHeader'
 import { BlogsView } from './components/Blogs/blogs'
 import { CategoryBlog } from './components/Blogs/catblog'
 import { BlogPost } from './components/Blogs/BlogPost'
+import { setToCart } from './Redux/CartSlice'
+
 // index.js or App.js
 
 
 function App() {
 
+  // localStorage.clear()
   const accesstoken = localStorage.getItem("token")
   console.log(accesstoken)
   const dispatch = useDispatch()
@@ -40,7 +43,28 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  
+    
+    else {
+
+// Retrieve cart items from localStorage
+const cartItemsStr = localStorage.getItem("cart-items");
+let cartItems = [];
+
+try {
+  // Parse the JSON string to an array
+  cartItems = JSON.parse(cartItemsStr) || [];
+} catch (error) {
+  console.error("Error parsing cart items:", error);
+}
+
+// Dispatch the setToCart action with the retrieved cart items
+if (cartItems && Array.isArray(cartItems)) {
+  console.log("herer")
+  dispatch(setToCart(cartItems));
+} else {
+  // Handle the case where the parsed data is not an array
+  console.error("Invalid cart items data:", cartItems);
+} }
 
 
 
