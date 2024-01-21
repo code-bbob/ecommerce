@@ -3,7 +3,7 @@ from .models import Product,Comment
 from math import ceil
 from django.contrib import messages 
 from django.http import HttpResponse
-from .serializers import ProductSerializer, UserSerializer, CommentSerializer, ReplySerializer
+from .serializers import ProductSerializer, CommentSerializer, ReplySerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import filters
@@ -64,6 +64,13 @@ class CatSearch(generics.ListAPIView):
             queryset = Product.objects.filter(category__iexact=cat)
     
         return queryset
+    
+class SubcatSearch(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['price']
+    search_fields = ['series']
 
 class CatBrandSearch(generics.ListAPIView):
     serializer_class = ProductSerializer

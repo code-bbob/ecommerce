@@ -41,4 +41,15 @@ class blogView(generics.ListAPIView):
         
         return queryset
     
-    
+
+class blogCategory(generics.ListAPIView):
+    serializer_class= BlogSerializer
+
+    def get_queryset(self):
+        
+        cat = self.kwargs.get('cat')
+
+        if id:
+            queryset = Blog.objects.filter(category=cat)
+        
+        return queryset

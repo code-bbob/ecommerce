@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 from django.conf import settings
+from django.utils import timezone
 # Create your models here.
 
 class Product(models.Model):
@@ -12,7 +13,7 @@ class Product(models.Model):
     series = models.CharField(max_length=50, default='')   
     price = models.IntegerField(default=0)
     desc= models.CharField(max_length=400)
-    pubDate = models.DateField()
+    pubDate = models.DateField(default=timezone.now)
     image=models.ImageField(upload_to='shop/images', default='')
 
     def __str__(self):
@@ -30,9 +31,8 @@ class Comment(models.Model):
         return self.text
 
 
-class Replies(models.Model):
+class Repliess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)#very important is related name
     text = models.CharField(max_length=100)
     pubDate = models.DateField(auto_now_add=True)
-

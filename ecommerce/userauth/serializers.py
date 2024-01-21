@@ -4,7 +4,7 @@ from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeErr
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from .utils import Util
-
+from cart.serializers import OrderSerializer
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
   # We are writing this becoz we need confirm password field in our Registratin Request
@@ -102,8 +102,11 @@ class UserPasswordResetSerializer(serializers.Serializer):
     except DjangoUnicodeDecodeError as identifier:
       PasswordResetTokenGenerator().check_token(user, token)
       raise serializers.ValidationError('Token is not Valid or Expired')
+    
   
 class UserInfoSerializer(serializers.ModelSerializer):
+  orders=OrderSerializer(many=True,read_only=True)#use related name orders related name vayera matra vako
   class Meta:
     model=User
-    fields=['name','email']
+    fields= '__all__'
+    
