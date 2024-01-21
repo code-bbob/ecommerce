@@ -13,6 +13,7 @@ import { setUserDetails } from './Redux/UserSlice'
 import { HeaderBlog } from './components/Blogs/blogHeader'
 import { BlogsView } from './components/Blogs/blogs'
 import { CategoryBlog } from './components/Blogs/catblog'
+import { BlogPost } from './components/Blogs/BlogPost'
 // index.js or App.js
 
 
@@ -72,13 +73,12 @@ function App() {
           <Route path ='' element={<BlogsView/>}/>
             <Route path=':id' element={<SingleBlog/>}/>
             <Route path='cat/:cat' element = {<CategoryBlog/>}/>
-
-            
+            <Route path='post' element = {<BlogPost/>}/>
 
         </Route>
+      </Routes>
         
 
-      </Routes>
       
     
    
