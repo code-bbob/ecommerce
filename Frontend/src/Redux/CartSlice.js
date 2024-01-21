@@ -8,20 +8,63 @@ export const CartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    // setUserDetails: (state, action) => {
-    //   state.value = action.payload
-    //  },
+    // setToCart: (state, action) => {
+    //   // Assuming action.payload is an array of products
+    //   const products = action.payload;
+    //   const oldItems = [...state.cartItems];
+    
+    //   const updatedItems = products.map((product) => ({
+    //     productId: product.productId,
+    //     productName: product.productName,
+    //     price: product.price,
+    //     image: product.image,
+    //     category: product.category
+    //   }));
+    
+    //   updatedItems.forEach((updatedItem) => {
+    //     const matchedIndex = oldItems.findIndex((el) => el.productId === updatedItem.productId);
+    
+    //     if (matchedIndex !== -1) {
+    //       // If the product is already in the cart, update the quantity
+    //       oldItems[matchedIndex] = {
+    //         ...oldItems[matchedIndex],
+    //         quantity: oldItems[matchedIndex].quantity + 1
+    //       };
+    //     } else {
+    //       // If the product is not in the cart, add it with quantity 1
+    //       oldItems.push({ ...updatedItem, quantity: 1 });
+    //     }
+    //   });
+    
+    //   state.cartItems = oldItems;
+    //   console.log("Items after refresh", state.cartItems);
+    // },
+    
      setToCart :(state,action) => {
-        let product = action.payload   
-        console.log(product)
-        let oldItems = [...state.cartItems]  
-        let {productId, productName,price,image, category} = product
+      console.log("called with action here",action)
+        let products = action.payload   
 
-        let matched = oldItems.find(el => el.productId == productId)
+        let oldItems = [...state.cartItems] 
+        // console.log("old",oldItems) 
 
+        const p = products.map((product)=>{
+          return {
+            productId: product.productId,
+            productName: product.productName,
+            price: product.price,
+            image: product.image,
+            category: product.category
+
+          }
+         })
+         // let {productId, productName,price,image, category} = product
+        
+         p.forEach((pItem) => {
+          let matched = oldItems.find((el) => el.productId == pItem.productId);
+        
         if(matched){
             oldItems = oldItems.map((el)=>{
-                if(el.productId === productId){
+                if(el.productId === pItem.productId){
                     return {...el, quantity: el.quantity + 1  }
                 }
                 
@@ -30,12 +73,13 @@ export const CartSlice = createSlice({
 
         }else {
 
-             oldItems.push({productId, productName,price,image, category, quantity: 1})
+             oldItems.push({...pItem, quantity: 1})
         }
-
+      });
 
         state.cartItems = oldItems
-
+        // console.log("itemsafterrefresh",state.cartItems)
+        
         
      },
 
