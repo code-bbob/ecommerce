@@ -4,6 +4,7 @@ from rest_framework import status
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
 
 class OrderAPIView(APIView):
     permission_classes=[IsAuthenticated]
@@ -36,6 +37,7 @@ class OrderAPIView(APIView):
     # Assuming you're using the user's ID to identify their order
         user = request.user
         order = Order.objects.filter(user=user).first()
+        serializer = OrderSerializer(order)
 
         if order:
             order_items_data = request.data.get('order_items', [])
@@ -54,7 +56,6 @@ class OrderAPIView(APIView):
                     order_item.quantity = quantity
                     order_item.save()
 
-            return Response({'detail': 'Order items updated successfully.'})
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
-
