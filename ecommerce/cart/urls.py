@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import OrderAPIView
+from . import views
 
 urlpatterns = [
     # URL for listing and creating orders (GET and POST)
