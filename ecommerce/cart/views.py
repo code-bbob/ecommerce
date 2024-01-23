@@ -14,24 +14,24 @@ class OrderAPIView(APIView):
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
     
-    # def post(self, request):
-    #     data = request.data
-    #     user = request.user
-    #     order_items_data = data.pop('order_items', [])
+    def post(self, request):
+        data = request.data
+        user = request.user
+        order_items_data = data.pop('order_items', [])
         
-    #     order_serializer = OrderSerializer(data=data)
-    #     if order_serializer.is_valid():
-    #         order = order_serializer.save(user=user)
+        order_serializer = OrderSerializer(data=data)
+        if order_serializer.is_valid():
+            order = order_serializer.save(user=user)
 
-    #         order_items_serializer = OrderItemSerializer(data=order_items_data, many=True)
-    #         if order_items_serializer.is_valid():
-    #             order_items_serializer.save(order=order)
-    #             return Response(order_serializer.data, status=status.HTTP_201_CREATED)
-    #         else:
-    #             order.delete()  # Rollback order creation if order_items are not valid
-    #             return Response(order_items_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    #     else:
-    #         return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            order_items_serializer = OrderItemSerializer(data=order_items_data, many=True)
+            if order_items_serializer.is_valid():
+                order_items_serializer.save(order=order)
+                return Response(order_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                order.delete()  # Rollback order creation if order_items are not valid
+                return Response(order_items_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, *args, **kwargs):
     # Assuming you're using the user's ID to identify their order
