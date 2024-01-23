@@ -4,12 +4,16 @@ from rest_framework import status
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer
 from rest_framework.permissions import IsAuthenticated
+from userauth.serializers import UserInfoSerializer
 
-class OrderAPIView(APIView):
+class   OrderAPIView(APIView):
     permission_classes=[IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        orders = Order.objects.all()
+        print(request.user)
+        print("####################################")
+        orders = Order.objects.filter(user=request.user)
+        print(orders)
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
     
@@ -53,8 +57,8 @@ class OrderAPIView(APIView):
                     # Update the quantity
                     order_item.quantity = quantity
                     order_item.save()
-
-            return Response({'detail': 'Order items updated successfully.'})
+            userprofserializer = UserInfoSerializer(request.user)
+            return Response(userprofserializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
 
