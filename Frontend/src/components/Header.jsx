@@ -102,7 +102,7 @@ export function HeaderMid() {
 
   let totalPrice = 0;
   cartItems.forEach((element) => {
-    totalPrice += element.price;
+    totalPrice += element.price * element.quantity ;
   });
 
   const URL = "http://localhost:8000/shop/api/";
@@ -296,6 +296,15 @@ export function HeaderMid() {
                                           <button
                                             onClick={()=>{
                                               dispatch(removeFromCart(cartItems))
+                                              const existingCartItemsJSON = localStorage.getItem("cart-items");
+                                              const existingCartItems = existingCartItemsJSON ? JSON.parse(existingCartItemsJSON) : [];
+                                              const indexToRemove = existingCartItems.findIndex(item => item.productId === cartItems.productId);
+
+                                              if (indexToRemove !== -1) {
+                                                existingCartItems.splice(indexToRemove, 1);
+                                                localStorage.setItem("cart-items", JSON.stringify(existingCartItems));
+                                                console.log("Removed item with productId:", cartItems.productId);
+                                              }
                                             }}
                                             type="button"
                                             className="font-medium text-indigo-600 hover:text-indigo-500"
@@ -305,6 +314,7 @@ export function HeaderMid() {
                                         </div>
                                       </div>
                                     </div>
+                                    
                                   </li>
                                 ))}
                               </ul>

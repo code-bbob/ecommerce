@@ -27,7 +27,11 @@ export function Products() {
     
     const singleprod = [prod]
     if(userDetails){
-      dispatch(setToCart(singleprod))
+      const existingCartItemsJSON = localStorage.getItem("cart-items");
+      const existingCartItems = existingCartItemsJSON ? JSON.parse(existingCartItemsJSON) : [];
+      const updatedCartItems = [...existingCartItems];
+      dispatch(setToCart(updatedCartItems))
+      localStorage.removeItem(cart-items)
       // axios.post to post in backend with userDetails and prod details
        
       
