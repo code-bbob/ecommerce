@@ -3,8 +3,14 @@ from django.conf import settings
 import uuid
 from django.utils import timezone
 class Order(models.Model):
+    STATUS_CHOICES = [
+        ('Unplaced','Unplaced'),
+        ('Placed','Placed'),
+        ('Cleared','Cleared')
+    ]
     orderNumber = models.UUIDField(default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', on_delete=models.CASCADE)
+    status = models.CharField(max_length=10,choices=STATUS_CHOICES,default="Unplaced")
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 
