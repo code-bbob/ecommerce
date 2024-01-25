@@ -36,7 +36,7 @@ class OrderAPIView(APIView):
     def patch(self, request, *args, **kwargs):
     # Assuming you're using the user's ID to identify their order
         user = request.user
-        order = Order.objects.filter(user=user).first()
+        order = Order.objects.filter(user=user,status="Unplaced").first()
         serializer = OrderSerializer(order)
 
         if order:
