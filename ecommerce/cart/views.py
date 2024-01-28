@@ -5,6 +5,7 @@ from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
+from .utils import Util
 
 class OrderAPIView(APIView):
     permission_classes=[IsAuthenticated]
@@ -37,6 +38,7 @@ class OrderAPIView(APIView):
     # Assuming you're using the user's ID to identify their order
         user = request.user
         order = Order.objects.filter(user=user,status="Unplaced").first()
+        print(order)
         serializer = OrderSerializer(order)
 
         if order:
@@ -59,3 +61,20 @@ class OrderAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+class CheckoutView(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self, request):
+        user=request.user
+        order=Order.objects.filter(user=user, status ="Unplaced").first()
+        print(user)
+        order.status="Placed"
+        order.save()
+        body = 'A new order has been placed '+str(order)
+        data = {
+        'subject':'New order',
+        'body':body,
+        'to_email':'bbobbasnet@gmail.com'
+      } 
+        Util.send_email(data)
+        return Response(status=status.HTTP_200_OK)
