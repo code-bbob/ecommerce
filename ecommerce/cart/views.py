@@ -70,9 +70,9 @@ class CheckoutView(APIView):
         print(user)
         order.status="Placed"
         order.save()
-        body = 'A new order has been placed '+str(order)
+        body = 'A new order has been placed '+ str(order) + '\nPlease check the admin page for more details and dont forget to set the status to clear after it is cleared'
         data = {
-        'subject':'New order',
+        'subject':'New order Placed',
         'body':body,
         'to_email':'bbobbasnet@gmail.com'
       } 
