@@ -14,8 +14,11 @@ class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 
+    def order_items_str(self):
+        items_list= '\n'.join([str(order_item) for order_item in self.order_items.all()])
+        return f"\n{items_list}"
     def __str__(self):
-        return f"{self.orderNumber} by {self.user}"
+        return f"{self.orderNumber} by {self.user},\n Items: {self.order_items_str()}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
