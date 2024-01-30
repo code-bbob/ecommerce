@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import uuid
 from django.conf import settings
 from django.utils import timezone
+from ckeditor.fields import RichTextField
 # Create your models here.
 
 class Product(models.Model):
@@ -12,7 +13,7 @@ class Product(models.Model):
     brandName = models.CharField(max_length=50, default='')
     series = models.CharField(max_length=50, default='')   
     price = models.IntegerField(default=0)
-    desc= models.CharField(max_length=400)
+    desc= RichTextField()
     pubDate = models.DateField(default=timezone.now)
     image=models.ImageField(upload_to='shop/images', default='')
 
