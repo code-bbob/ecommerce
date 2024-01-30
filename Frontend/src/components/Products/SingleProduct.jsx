@@ -107,9 +107,11 @@ export function SingleProduct() {
               <button className="border bg-white hover:bg-orange-300 px-2 ">
                 <CiHeart />
               </button>
+              
             </div>
           </div>
         </div>
+        <div dangerouslySetInnerHTML={{ __html: product[0]?.desc}} />
       </div>
     </>
   );
