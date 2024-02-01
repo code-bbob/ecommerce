@@ -41,12 +41,7 @@ export function SingleBlog() {
                     <p href="#" className="text-sm pb-8">
                         By <a href="#" className="font-semibold no-underline hover:text-gray-800">{blog[0]?.author}</a>, Published on {blog[0]?.date}
                     </p>
-                    <h1 className="text-2xl font-bold pb-3">Introduction</h1>
-                    <p className="pb-3 whitespace-pre-line ">{blog[0]?.introduction}</p>
-                    <h1 className="text-2xl font-bold pb-3">Body</h1>
-                    <p className="pb-3 whitespace-pre-line ">{blog[0]?.body}</p>
-                    <h1 className="text-2xl font-bold pb-3">Conclusion</h1>
-                    <p className="pb-3 whitespace-pre-line ">{blog[0]?.conclusion}</p>
+                    <div dangerouslySetInnerHTML={{ __html: blog[0]?.body}} />
                 </div>
             </article>
 
