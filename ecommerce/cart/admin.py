@@ -1,12 +1,16 @@
 # admin.py (Django example)
 from django.contrib import admin
-from .models import OrderItem, Order
+from .models import OrderItem, Order, Delivery
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0  # Number of empty forms to display for adding new items
 
-class OrderAdmin(admin.ModelAdmin):
-    inlines = [OrderItemInline]
+class DeliveryItemInline(admin.TabularInline):
+    model = Delivery
+    extra = 0
 
-admin.site.register(Order, OrderAdmin)
+class OrderAdmin(admin.ModelAdmin):
+    inlines = [OrderItemInline,DeliveryItemInline]
+
+admin.site.register(Order, OrderAdmin,)

@@ -30,3 +30,11 @@ class OrderItem(models.Model):
 
     class Meta:
         unique_together = ['order', 'product']
+
+class Delivery(models.Model):
+    order=models.ForeignKey(Order, related_name='delivery', on_delete=models.CASCADE)#yo rel name xai uta fields ma use hunxa serializers ko
+    phone_number = models.CharField(max_length=10,default='')
+    address = models.CharField(max_length=100,default='')
+
+    def __str__(self):
+        return f"Delivery for {self.order.user}"

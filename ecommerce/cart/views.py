@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Order, OrderItem
-from .serializers import OrderSerializer, OrderItemSerializer
+from .serializers import OrderSerializer, OrderItemSerializer, DeliverySerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from .utils import Util
@@ -62,19 +62,45 @@ class OrderAPIView(APIView):
         else:
             return Response({'detail': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+# class CheckoutView(APIView):
+#     permission_classes=[IsAuthenticated]
+#     def post(self, request):
+#         user=request.user
+#         order=Order.objects.filter(user=user, status ="Unplaced").first()
+#         print(user)
+#         order.status="Placed"
+#         order.save()
+#         body = 'A new order has been placed '+ str(order) + '\nPlease check the admin page for more details and dont forget to set the status to clear after it is cleared'
+#         data = {
+#         'subject':'New order Placed',
+#         'body':body,
+#         'to_email':'bbobbasnet@gmail.com'
+#       } 
+#         Util.send_email(data)
+#         return Response(status=status.HTTP_200_OK)
+    
+
 class CheckoutView(APIView):
     permission_classes=[IsAuthenticated]
     def post(self, request):
         user=request.user
         order=Order.objects.filter(user=user, status ="Unplaced").first()
-        print(user)
-        order.status="Placed"
-        order.save()
-        body = 'A new order has been placed '+ str(order) + '\nPlease check the admin page for more details and dont forget to set the status to clear after it is cleared'
-        data = {
-        'subject':'New order Placed',
-        'body':body,
-        'to_email':'bbobbasnet@gmail.com'
-      } 
-        Util.send_email(data)
-        return Response(status=status.HTTP_200_OK)
+        print(order)
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        serializer = DeliverySerializer(data=request.data)  
+        if serializer.is_valid():
+            print("###################################")
+            serializer.save(order=order)
+            print(user)
+            order.status="Placed"
+            order.save()
+            body = 'A new order has been placed '+ str(order) + '\nPlease check the admin page for more details and dont forget to set the status to clear after it is cleared'
+            data = {
+            'subject':'New order Placed',
+            'body':body,
+            'to_email':'bbobbasnet@gmail.com'
+            } 
+            # Util.send_email(data)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({''},status=status.HTTP_400_BAD_REQUEST)
