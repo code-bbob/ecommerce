@@ -41,7 +41,7 @@ export function SingleBlog() {
                     <p href="#" className="text-sm pb-8">
                         By <a href="#" className="font-semibold no-underline hover:text-gray-800">{blog[0]?.author}</a>, Published on {blog[0]?.date}
                     </p>
-                    <div dangerouslySetInnerHTML={{ __html: blog[0]?.body}} />
+                    <div dangerouslySetInnerHTML={{ __html: blog[0]?.content}} />
                 </div>
             </article>
 

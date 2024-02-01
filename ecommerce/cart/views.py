@@ -85,13 +85,9 @@ class CheckoutView(APIView):
     def post(self, request):
         user=request.user
         order=Order.objects.filter(user=user, status ="Unplaced").first()
-        print(order)
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         serializer = DeliverySerializer(data=request.data)  
         if serializer.is_valid():
-            print("###################################")
             serializer.save(order=order)
-            print(user)
             order.status="Placed"
             order.save()
             body = 'A new order has been placed '+ str(order) + '\nPlease check the admin page for more details and dont forget to set the status to clear after it is cleared'

@@ -60,9 +60,9 @@ export function BlogsView() {
                   , Published on {b?.date}
                 </p>
                 <p className="pb-6">
-                  {b?.introduction && b?.introduction.length > 100
-                    ? `${b?.introduction.slice(0, 150)}...`
-                    : b?.introduction}
+                  {b?.content && b?.content.length > 100
+                    ? `${b?.content.slice(0, 150)}...`
+                    : b?.content}
                 </p>
                 <a
                   href="#"
