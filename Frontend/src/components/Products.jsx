@@ -71,8 +71,12 @@ const BlogCard = ({ blog }) => {
       <img src={blog.image} alt="img" className="w-full h-48 object-cover" />
 
       <div className="p-4">
-        <p className="text-lg font-semibold text-gray-800 mb-2">{blog.title}</p>
-        <p className="text-gray-700 text-sm">{blog.content}</p>
+        <p className="text-lg font-semibold text-gray-800 mb-2"> 
+                   {blog?.title && blog?.title.length > 43
+                    ? `${blog?.title.slice(0, 43)}...`
+                    : blog?.title}
+                    </p>
+        <p className="text-gray-700 text-sm">By {blog.author}, Published on {blog.date}</p>
       </div>
     </div>
   );
