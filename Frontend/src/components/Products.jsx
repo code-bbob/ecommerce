@@ -42,15 +42,15 @@ const ProductCard = ({ product }) => {
   return (
     <div className="bg-white rounded-lg shadow-xl p-1 transform hover:scale-105 transition duration-300 hover:shadow-lg">
       <Link to={`/products/${product.productId}`}>
-        <img src={product.image} alt={product.productName} className="w-full h-48 object-contain" />
+        <img src={product?.images[0]?.image} alt={product.productName} className="w-full h-48 object-contain" />
       </Link>
 
       <div className="p-4">
-        <Link to={`/products/${product.productId}`} className="text-lg font-semibold text-gray-800 hover:text-blue-500 mb-2 block">
+        <Link to={`/products/${product?.productId}`} className="text-lg font-semibold text-gray-800 hover:text-blue-500 mb-2 block">
           {product.productName}
         </Link>
 
-        <p className="text-gray-700 text-sm mb-2">Price Nrs: {product.price}</p>
+        <p className="text-gray-700 text-sm mb-2">Price Nrs: {product?.price}</p>
 
         <button
           onClick={() => handleCart(product)}

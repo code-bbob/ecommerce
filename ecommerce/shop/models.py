@@ -15,11 +15,13 @@ class Product(models.Model):
     price = models.IntegerField(default=0)
     desc= RichTextField()
     pubDate = models.DateField(default=timezone.now)
-    image=models.ImageField(upload_to='shop/images', default='')
 
     def __str__(self):
         return self.productName
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='shop/images', default='')
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
