@@ -4,6 +4,7 @@ from rest_framework import status
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer, DeliverySerializer
 from rest_framework.permissions import IsAuthenticated
+import random
 from rest_framework import generics
 from .utils import Util
 

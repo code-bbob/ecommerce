@@ -173,7 +173,7 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 }
 
-PASSWORD_RESET_TIMEOUT = 900
+PASSWORD_RESET_TIMEOUT = 900 
 
 # Email Configuration
 EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
