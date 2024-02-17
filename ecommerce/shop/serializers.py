@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Comment, Repliess, ProductImage
+from .models import Product, Comment, Repliess, ProductImage, Rating
 from django.contrib.auth.models import User
 
 class ReplySerializer(serializers.ModelSerializer):
@@ -31,7 +31,14 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
     images = ProductImageSerializer(many = True, read_only = True)
+    rating = serializers.SerializerMethodField()
     class Meta:
         model = Product
         fields = '__all__'
-
+    
+    def get_rating(self, obj):
+        ratings = Rating.objects.filter(product=obj)
+        if ratings.exists():
+            avg_rating = sum(rating.rating for rating in ratings) / len(ratings)
+            return round(avg_rating, 1)
+        return 0.0
