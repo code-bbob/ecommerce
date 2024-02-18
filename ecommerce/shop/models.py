@@ -17,6 +17,11 @@ class Product(models.Model):
     description= RichTextField()
     published_date = models.DateField(default=timezone.now)
     
+    def update_rating(self):
+        avg_rating = self.ratings.aggregate(models.Avg('rating'))['rating__avg']
+        self.rating = round(avg_rating, 1) if avg_rating is not None else 0
+        self.save()
+
 
     def __str__(self):
         return self.name
