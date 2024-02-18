@@ -28,7 +28,7 @@ class ApiSearch(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['productName', 'desc']
+    search_fields = ['name', 'description']
     ordering_fields = ['price']
 
 class BrandSearch(generics.ListAPIView):
@@ -47,7 +47,7 @@ class ProductSearch(generics.ListAPIView):
 
         # Filter the queryset based on the 'id' parameter
         if id:
-            queryset = Product.objects.filter(productId=id)
+            queryset = Product.objects.filter(product_id=id)
         
         return queryset
 
