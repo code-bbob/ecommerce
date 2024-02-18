@@ -27,6 +27,15 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         fields = ['image']
 
+class RatingSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(read_only = True)
+    product = serializers.PrimaryKeyRelatedField(read_only =True)
+    class Meta:
+        model = Rating
+        fields = '__all__'
+
+    def get_user(self, obj):
+        return obj.user.name
 
 class ProductSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
