@@ -5,7 +5,6 @@ import Plugins from "./plugins";
 import BlogFooter from "./blogFooter";
 import { FaTwitter, FaFacebook, FaInstagram } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-
 export function SingleBlog() {
   const [blog, setBlog] = useState([]);
   const params = useParams();
@@ -16,6 +15,7 @@ export function SingleBlog() {
       .get(`http://localhost:8000/blog/api/${blogId}`)
       .then((res) => {
         setBlog(res.data);
+        console.log('lololololololololo',res.data);
       })
       .catch((err) => {
         console.log(err);
