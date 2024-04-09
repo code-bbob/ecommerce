@@ -43,9 +43,10 @@ export const CartSlice = createSlice({
      setToCart :(state,action) => {
       console.log("called with action here",action)
         let products = action.payload   
+        console.log("product here",products)
 
         let oldItems = [...state.cartItems] 
-        // console.log("old",oldItems) 
+        console.log("old",oldItems) 
 
         const p = products.map((product)=>{
           return {
@@ -78,7 +79,7 @@ export const CartSlice = createSlice({
       });
 
         state.cartItems = oldItems
-        // console.log("itemsafterrefresh",state.cartItems)
+        console.log("itemsafterrefresh",state.cartItems)
         
         
      },

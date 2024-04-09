@@ -4,12 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setToCart } from "../Redux/CartSlice";
 import { ToastContainer, toast } from "react-toastify";
+import SingleProduct from "./Products/SingleProduct";
 
 export function Products() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userDetails = useSelector((state)=>state.user.value)
   const [products, setProducts] = useState([]);
+
+  // const [orderedProducts, setOrderProducts] = useState([])
   useEffect(() => {
     axios
       .get("http://localhost:8000/shop/api/")
@@ -23,41 +26,7 @@ export function Products() {
   }, []);
 
 
-  function handleCart(prod){
-    
-    const singleprod = [prod]
-    if(userDetails){
-      const existingCartItemsJSON = localStorage.getItem("cart-items");
-      const existingCartItems = existingCartItemsJSON ? JSON.parse(existingCartItemsJSON) : [];
-      const updatedCartItems = [...existingCartItems];
-      dispatch(setToCart(updatedCartItems))
-      localStorage.removeItem(cart-items)
-      // axios.post to post in backend with userDetails and prod details
-       
-      
-    }
-    else{
-      console.log("here and")
-      dispatch(setToCart(singleprod));
-    const existingCartItemsJSON = localStorage.getItem("cart-items");
-    const existingCartItems = existingCartItemsJSON ? JSON.parse(existingCartItemsJSON) : [];
-    const updatedCartItems = [...existingCartItems,...singleprod];
-    const updatedCartItemsJSON = JSON.stringify(updatedCartItems);
-    localStorage.setItem("cart-items",updatedCartItemsJSON)
-
-
-
-    toast.success(`${prod.productName} added to Cart`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: false,
-      theme: "dark",
-    });
-  }
-  }
+ 
 
   return (
     <>
@@ -66,31 +35,9 @@ export function Products() {
         {products.map((prod, i) => {
           return (
             <>
-              <div className="p-3">
-                <div
-                  onClick={() => {
-                    navigate(`/products/${prod.productId}`);
-                  }}
-                  className="bg-white p-3"
-                >
-                  <img
-                    className="h-40 w-40 my-3 mx-auto"
-                    src={prod.image}
-                    alt=""
-                  />
-                  <p className="p-0 m-0">
-                    {prod.series}
-                    {prod.productName}
-                  </p>
-                  <p>Price Nrs:{prod.price}</p>
-                </div>
-                <button
-                  onClick={()=> {handleCart(prod)}}
-                  className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full"
-                >
-                  Add To Cart
-                </button>
-              </div>
+            <SingleProduct key={i} prod ={prod}
+
+            />
             </>
           );
         })}
@@ -141,3 +88,6 @@ blogs.map((blog,i)=>{
     </>
   );
 }
+
+
+

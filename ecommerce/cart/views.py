@@ -18,16 +18,21 @@ class   OrderAPIView(APIView):
         return Response(serializer.data)
     
     def post(self, request):
+        print("!1")
         data = request.data
+        print("yaha smma $$$$$$$$$$$$$$$$$$$$$$")
         user = request.user
+        print("yaha smma $$$$$$$$$$$$$$$$$$$$$$")
         order_items_data = data.pop('order_items', [])
+        print("yaha smma $$$$$$$$$$$$$$$$$$$$$$")
         
         order_serializer = OrderSerializer(data=data)
-        if order_serializer.is_valid():
+
+        if order_serializer.is_valid(raise_exception=True):
             order = order_serializer.save(user=user)
 
             order_items_serializer = OrderItemSerializer(data=order_items_data, many=True)
-            if order_items_serializer.is_valid():
+            if order_items_serializer.is_valid(raise_exception=True):
                 order_items_serializer.save(order=order)
                 return Response(order_serializer.data, status=status.HTTP_201_CREATED)
             else:

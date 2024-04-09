@@ -15,6 +15,7 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { removeFromCart } from "../Redux/CartSlice";
+import { setToCart } from "../Redux/CartSlice";
 
 export function HeaderTop() {
   const dispatch = useDispatch();
@@ -31,7 +32,6 @@ export function HeaderTop() {
       theme: "light",
     });
     dispatch(logoutUser());
-
     navigate("/");
   }
 
@@ -62,7 +62,7 @@ export function HeaderTop() {
             <li>
               {userDetails ? (
                 <>
-                  z
+                
                   <Link
                     to="/"
                     onClick={handleLogout}
@@ -92,13 +92,21 @@ export function HeaderTop() {
 }
 
 export function HeaderMid() {
+
+
+  const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const userDetails = useSelector((state)=>state.user.value);
   const navigate = useNavigate();
   const [searched, setSearched] = useState(false);
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]);
+
+
+
+
 
   let totalPrice = 0;
   cartItems.forEach((element) => {
@@ -139,6 +147,59 @@ export function HeaderMid() {
     filteredProduct.length > 0 && query.length > 0 ? filteredProduct : null;
   console.log("queried filtered", results);
 
+
+  function handleRemove(cartItems){
+    console.log("cartitems here", cartItems)
+    if(userDetails){
+      {
+        axios.patch("http://localhost:8000/cart/api/", {
+          order_items: [
+              {
+                  product: cartItems.productId,
+                  quantity: cartItems.quantity - 1 ,
+              }
+          ]
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+      }
+      
+      },
+    )
+      .then((res) => {
+          console.log(res);
+          dispatch(setToCart(res.data.order_items));
+  
+          
+      })
+      .catch((err) => {
+          console.log(err);
+      });
+      }
+    }
+    
+  else{
+      dispatch(removeFromCart(cartItems))
+      const existingCartItemsJSON = localStorage.getItem("cart-items");
+      const existingCartItems = existingCartItemsJSON ? JSON.parse(existingCartItemsJSON) : [];
+      const indexToRemove = existingCartItems.findIndex(item => item.productId === cartItems.productId);
+    
+      if (indexToRemove !== -1) {
+        existingCartItems.splice(indexToRemove, 1);
+        localStorage.setItem("cart-items", JSON.stringify(existingCartItems));
+        console.log("Removed item with productId:", cartItems.productId);
+      }
+
+
+  
+  }
+
+  
+
+
+  }
+
   return (
     <>
       <div className="p-4 flex items-center justify-between">
@@ -163,13 +224,13 @@ export function HeaderMid() {
               results?.map((product) => (
                 <>
                   <div className="flex flex-row bg-red-400">
-                    <div
+                    <div 
                       onClick={() => {
                         navigate(`/products/${product.productId}`);
                         setQuery("");
                       }}
                       key={product.id}
-                      className="z-40 w-full p-2 block border-1 bg-gray-400"
+                      className="hover:cursor-pointer z-40 w-full p-2 block border-1 bg-gray-400"
                     >
                       {product.productName}
                     </div>
@@ -294,18 +355,7 @@ export function HeaderMid() {
 
                                         <div className="flex">
                                           <button
-                                            onClick={()=>{
-                                              dispatch(removeFromCart(cartItems))
-                                              const existingCartItemsJSON = localStorage.getItem("cart-items");
-                                              const existingCartItems = existingCartItemsJSON ? JSON.parse(existingCartItemsJSON) : [];
-                                              const indexToRemove = existingCartItems.findIndex(item => item.productId === cartItems.productId);
-
-                                              if (indexToRemove !== -1) {
-                                                existingCartItems.splice(indexToRemove, 1);
-                                                localStorage.setItem("cart-items", JSON.stringify(existingCartItems));
-                                                console.log("Removed item with productId:", cartItems.productId);
-                                              }
-                                            }}
+                                            onClick={()=>{handleRemove(cartItems)}}
                                             type="button"
                                             className="font-medium text-indigo-600 hover:text-indigo-500"
                                           >
@@ -366,6 +416,7 @@ export function HeaderMid() {
 }
 
 export function HeaderBottom() {
+  const navigate = useNavigate()
   const [products, setProducts] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -445,11 +496,14 @@ export function HeaderBottom() {
                                           )
                                           .map((product, k) => (
                                             <li
-                                              className="text-gray-500 z-10	"
-                                              key={k}
+                                            onClick={()=>{navigate(`products/${product.productId}`)}}
+
+                                            className="text-gray-500 z-10	"
+                                            key={k}
                                             >
                                               {product.productName}
                                             </li>
+                                            
                                           ))}
                                       </div>
                                     </>
@@ -474,3 +528,6 @@ export function HeaderBottom() {
     </>
   );
 }
+
+
+
