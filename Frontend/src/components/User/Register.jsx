@@ -39,7 +39,7 @@ export function Login() {
           theme: "dark",
         });
         dispatch(setUserDetails(res.data.userDetails))
-        localStorage.setItem("token",res.data.token.access)
+        localStorage.setItem("token",res.data.userDetails.token.access)
         navigate("/")
 
       })
@@ -130,7 +130,7 @@ export function Signup() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (e.target.password.value === e.target.repeat_password.value) {
+    if (e.target.password.value === e.target.password2.value) {
       axios
         .post("http://localhost:8000/userauth/api/register/", {
           name: e.target.name.value,

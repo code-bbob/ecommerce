@@ -2,17 +2,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Order, OrderItem
-from .serializers import OrderSerializer, OrderItemSerializer, DeliverySerializer
+from .serializers import OrderSerializer, OrderItemSerializer, DeliverySerializer, OrderItemPostSerializer
 from rest_framework.permissions import IsAuthenticated
 import random
 from rest_framework import generics
 from .utils import Util
 
-class OrderAPIView(APIView):
+class   OrderAPIView(APIView):
     permission_classes=[IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        orders = Order.objects.all()
+        print(request.user)
+        orders = Order.objects.filter(user=request.user, status = "Unplaced")
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
     
@@ -20,13 +21,15 @@ class OrderAPIView(APIView):
         data = request.data
         user = request.user
         order_items_data = data.pop('order_items', [])
-        
+        print(data)
         order_serializer = OrderSerializer(data=data)
-        if order_serializer.is_valid():
+        if order_serializer.is_valid(raise_exception=True):
+            print("hehehehehehe")
             order = order_serializer.save(user=user)
-
-            order_items_serializer = OrderItemSerializer(data=order_items_data, many=True)
-            if order_items_serializer.is_valid():
+            print(order)
+            order_items_serializer = OrderItemPostSerializer(data=order_items_data, many=True)
+            print(order_items_serializer)
+            if order_items_serializer.is_valid(raise_exception=True):
                 order_items_serializer.save(order=order)
                 return Response(order_serializer.data, status=status.HTTP_201_CREATED)
             else:

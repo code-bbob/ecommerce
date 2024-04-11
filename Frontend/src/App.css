@@ -1,0 +1,55 @@
+
+
+
+
+/* styling for singleproduct hover card design */
+
+
+.myCard {
+    overflow: hidden;
+    position: relative;
+  }
+  
+.myImg::after{
+    content: "";
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    padding: 10px;
+    opacity: 0;
+
+}
+
+.myCard:hover .myImg::after {
+    /* top: 0%; */
+    height: 100%;
+    opacity: 0.5;
+    z-index: 40;
+    transition: all 0.4s ease-in-out;
+  }
+.myImg:not(:hover)::after {
+    height: 0;
+    transition: all 0.5s ease-in-out;
+  }
+  
+.myDetails {
+  height: 0;
+  width: 0;
+  opacity: 0;
+  
+}
+
+.myCard:hover .myDetails {
+  z-index: 1000;
+  height: fit-content;
+  width: fit-content;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 100;
+
+}
