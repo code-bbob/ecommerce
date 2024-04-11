@@ -106,6 +106,13 @@ class UserPasswordResetSerializer(serializers.Serializer):
   
 class UserInfoSerializer(serializers.ModelSerializer):
   orders=OrderSerializer(many=True,read_only=True)#use related name orders related name vayera matra vako
+  unplaced_orders = serializers.SerializerMethodField()
+
+  def get_unplaced_orders(self, user):
+    unplaced_orders = user.orders.filter(status='Unplaced')#esma orders vaneko uta related field ko orders ako ho
+    serializer = OrderSerializer(unplaced_orders, many=True)
+    return serializer.data
+  
   class Meta:
     model=User
     fields= '__all__'

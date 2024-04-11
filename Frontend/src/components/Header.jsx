@@ -36,7 +36,7 @@ export function HeaderTop() {
   }
 
   const userDetails = useSelector((state) => state.user.value);
-  console.log("userdetbybest", userDetails);
+  // console.log("userdetbybest", userDetails);
   return (
     <>
       <ToastContainer />
@@ -98,6 +98,7 @@ export function HeaderMid() {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch()
   const cartItems = useSelector((state) => state.cart.cartItems);
+  // console.log("cart from redux",cartItems)
   const userDetails = useSelector((state)=>state.user.value);
   const navigate = useNavigate();
   const [searched, setSearched] = useState(false);
@@ -119,7 +120,7 @@ export function HeaderMid() {
       .get(URL)
       .then((res) => {
         setProducts(res.data);
-        console.log("products from api", products);
+        // console.log("products from api", products);
       })
       .catch((err) => {
         console.log(err);
@@ -141,11 +142,11 @@ export function HeaderMid() {
     setSearched(true);
   }
   const filteredProduct = products.filter((items) =>
-    items.productName.toLowerCase().includes(query.toLowerCase())
+    items.productName?.toLowerCase().includes(query.toLowerCase())
   );
   const results =
     filteredProduct.length > 0 && query.length > 0 ? filteredProduct : null;
-  console.log("queried filtered", results);
+  // console.log("queried filtered", results);
 
 
   function handleRemove(cartItems){
@@ -168,10 +169,9 @@ export function HeaderMid() {
       },
     )
       .then((res) => {
-          console.log(res);
+          console.log("returned after remove",res);
           dispatch(setToCart(res.data.order_items));
   
-          
       })
       .catch((err) => {
           console.log(err);

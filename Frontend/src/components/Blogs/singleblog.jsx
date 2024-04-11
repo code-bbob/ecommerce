@@ -5,7 +5,6 @@ import Plugins from "./plugins";
 import BlogFooter from "./blogFooter";
 import { FaTwitter, FaFacebook, FaInstagram } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-
 export function SingleBlog() {
   const [blog, setBlog] = useState([]);
   const params = useParams();
@@ -16,6 +15,7 @@ export function SingleBlog() {
       .get(`http://localhost:8000/blog/api/${blogId}`)
       .then((res) => {
         setBlog(res.data);
+        console.log('lololololololololo',res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -41,12 +41,7 @@ export function SingleBlog() {
                     <p href="#" className="text-sm pb-8">
                         By <a href="#" className="font-semibold no-underline hover:text-gray-800">{blog[0]?.author}</a>, Published on {blog[0]?.date}
                     </p>
-                    <h1 className="text-2xl font-bold pb-3">Introduction</h1>
-                    <p className="pb-3 whitespace-pre-line ">{blog[0]?.introduction}</p>
-                    <h1 className="text-2xl font-bold pb-3">Body</h1>
-                    <p className="pb-3 whitespace-pre-line ">{blog[0]?.body}</p>
-                    <h1 className="text-2xl font-bold pb-3">Conclusion</h1>
-                    <p className="pb-3 whitespace-pre-line ">{blog[0]?.conclusion}</p>
+                    <div dangerouslySetInnerHTML={{ __html: blog[0]?.content}} />
                 </div>
             </article>
 

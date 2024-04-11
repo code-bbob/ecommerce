@@ -1,6 +1,7 @@
-import { Blogs, Products } from "./Products";
 import { CCarousel, CCarouselItem, CImage } from "@coreui/react";
 import Footer from "./Footer";
+import { BlogsView } from "./Blogs/blogs";
+import { Products } from "./Products";
 
 // Carousel.js
 
@@ -42,10 +43,10 @@ export const Home = () => {
       <div className="bg-gray-300">
         <h1 className="text-center mt-10">Latest Products</h1>
 
-        <Products />
+        <Products/>
 
-        <h1 className="text-center mt-10">Latest Blogs</h1>
-        <Blogs />
+        {/* <h1 className="text-center mt-10">Latest Blogs</h1>
+        <BlogsView/> */}
       </div>
       <Footer />
     </>

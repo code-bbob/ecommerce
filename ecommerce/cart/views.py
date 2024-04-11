@@ -2,36 +2,33 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Order, OrderItem
-from .serializers import OrderSerializer, OrderItemSerializer
+from .serializers import OrderSerializer, OrderItemSerializer, DeliverySerializer, OrderItemPostSerializer
 from rest_framework.permissions import IsAuthenticated
+import random
 from rest_framework import generics
+from .utils import Util
 
 class   OrderAPIView(APIView):
     permission_classes=[IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         print(request.user)
-        print("####################################")
-        orders = Order.objects.filter(user=request.user)
-        print(orders)
+        orders = Order.objects.filter(user=request.user, status = "Unplaced")
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
     
     def post(self, request):
-        print("!1")
         data = request.data
-        print("yaha smma $$$$$$$$$$$$$$$$$$$$$$")
         user = request.user
-        print("yaha smma $$$$$$$$$$$$$$$$$$$$$$")
         order_items_data = data.pop('order_items', [])
-        print("yaha smma $$$$$$$$$$$$$$$$$$$$$$")
-        
+        print(data)
         order_serializer = OrderSerializer(data=data)
-
         if order_serializer.is_valid(raise_exception=True):
+            print("hehehehehehe")
             order = order_serializer.save(user=user)
-
-            order_items_serializer = OrderItemSerializer(data=order_items_data, many=True)
+            print(order)
+            order_items_serializer = OrderItemPostSerializer(data=order_items_data, many=True)
+            print(order_items_serializer)
             if order_items_serializer.is_valid(raise_exception=True):
                 order_items_serializer.save(order=order)
                 return Response(order_serializer.data, status=status.HTTP_201_CREATED)
@@ -44,7 +41,8 @@ class   OrderAPIView(APIView):
     def patch(self, request, *args, **kwargs):
     # Assuming you're using the user's ID to identify their order
         user = request.user
-        order = Order.objects.filter(user=user).first()
+        order = Order.objects.filter(user=user,status="Unplaced").first()
+        print(order)
         serializer = OrderSerializer(order)
 
         if order:
@@ -67,3 +65,42 @@ class   OrderAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+# class CheckoutView(APIView):
+#     permission_classes=[IsAuthenticated]
+#     def post(self, request):
+#         user=request.user
+#         order=Order.objects.filter(user=user, status ="Unplaced").first()
+#         print(user)
+#         order.status="Placed"
+#         order.save()
+#         body = 'A new order has been placed '+ str(order) + '\nPlease check the admin page for more details and dont forget to set the status to clear after it is cleared'
+#         data = {
+#         'subject':'New order Placed',
+#         'body':body,
+#         'to_email':'bbobbasnet@gmail.com'
+#       } 
+#         Util.send_email(data)
+#         return Response(status=status.HTTP_200_OK)
+    
+
+class CheckoutView(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self, request):
+        user=request.user
+        order=Order.objects.filter(user=user, status ="Unplaced").first()
+        serializer = DeliverySerializer(data=request.data)  
+        if serializer.is_valid():
+            serializer.save(order=order)
+            order.status="Placed"
+            order.save()
+            body = 'A new order has been placed '+ str(order) + '\nPlease check the admin page for more details and dont forget to set the status to clear after it is cleared'
+            data = {
+            'subject':'New order Placed',
+            'body':body,
+            'to_email':'bbobbasnet@gmail.com'
+            } 
+            # Util.send_email(data)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({''},status=status.HTTP_400_BAD_REQUEST)

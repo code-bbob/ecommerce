@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BlogFooter from "./blogFooter";
-import Plugins from "./plugins";
+import Plugins from "./Plugins";
 
 export function BlogsView() {
   const [blog, setBlog] = useState([]);
@@ -60,9 +60,9 @@ export function BlogsView() {
                   , Published on {b?.date}
                 </p>
                 <p className="pb-6">
-                  {b?.introduction && b?.introduction.length > 100
-                    ? `${b?.introduction.slice(0, 150)}...`
-                    : b?.introduction}
+                  {b?.content && b?.content.length > 100
+                    ? `${b?.content.slice(0, 150)}...`
+                    : b?.content}
                 </p>
                 <a
                   href="#"

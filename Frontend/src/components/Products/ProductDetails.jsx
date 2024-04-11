@@ -50,10 +50,10 @@ export function ProductDetails() {
         <div className="flex  gap-7">
           <div className="bg-white h-100% w-40 "></div>
           <div>
-            <img className="h-full max-w-xl" src={product[0]?.image} alt="oops" />
+            <img className="h-full max-w-xl" src={product[0]?.images[0]?.image} alt="oops" />
           </div>
           <div>
-            <h1>{product[0]?.productName}</h1>
+            <h1>{product[0]?.name}</h1>
             <div className="flex items-center gap-2" >
               <span className="flex">
                 <IoIosStarOutline />
@@ -95,7 +95,7 @@ export function ProductDetails() {
               <button onClick={() => {
                     console.log("here");
                     dispatch(setToCart(product[0]));
-                    toast.success(`${product[0].productName} added to Cart`, {
+                    toast.success(`${product[0].name} added to Cart`, {
                       position: "top-right",
                       autoClose: 2000,
                       hideProgressBar: false,

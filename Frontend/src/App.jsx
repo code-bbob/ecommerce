@@ -19,16 +19,16 @@ import { setToCart } from "./Redux/CartSlice";
 // index.js or App.js
 
 function App() {
-  // localStorage.clear()
-  const [cartItems, setcartItems] = useState([]);
+    // localStorage.clear()
+  const [cartItems, setcartItems] = useState({});
   const accesstoken = localStorage.getItem("token");
   const dispatch = useDispatch();
-  console.log(accesstoken);
+  // console.log(accesstoken);
 
   useEffect(() => {
-    console.log("here 1");
+    // console.log("here 1");
     if (accesstoken) {
-      console.log("here again");
+      // console.log("here again");
       axios
         .get("http://localhost:8000/userauth/api/userprofile/", {
           headers: {
@@ -36,7 +36,7 @@ function App() {
           },
         })
         .then((res) => {
-          console.log("user info ", res.data);
+          // console.log("user info ", res.data);
           dispatch(setUserDetails(res.data));
         })
         .catch((err) => console.log(err));
@@ -49,13 +49,13 @@ function App() {
         })
 
         .then((res) => {
-          console.log("here is value",res)
-          console.log("cart items from backend", cartItems);
+          // console.log("here is value",res)
+          setcartItems(res.data);
+          // console.log("cart items from backend", cartItems);
           //res.data bata ordered_items bane matra filter garera dispatch garuparyo redux slice ma kina bhane unnecessary junk chaidaina
 
-          setcartItems(res.data);
           const filteredCart = cartItems.map(item => item.order_items);
-          console.log("filtered cart items", filteredCart);
+          // console.log("filtered cart items", filteredCart);
 
 
           //ok everything works just fine tara consistency ra integrity banne chij xaina data ko product ra id and quantity dinxa yo array le tara dispatch garda initial product ko details jasari sapp data including productId quantity pic sapp bako dispatch garun parxa ani hunxa so do that i.e change the model of this return of get request anni dispatch handa hunxa but still euta arko error xa ctrl s handa same hune wala  yo solve bayepaxi sayad remove ma ni same nai copy paste hola nnothing specific 
@@ -106,7 +106,7 @@ function App() {
         cartItems = JSON.parse(cartItemsStr) || [];
         console.log("herer", cartItems);
         dispatch(setToCart(cartItems));
-        localStorage.clear();
+        // localStorage.clear();
       } catch (error) {
         console.error("Error parsing cart items:", error);
       }

@@ -3,7 +3,7 @@ from .models import Product,Comment
 from math import ceil
 from django.contrib import messages 
 from django.http import HttpResponse
-from .serializers import ProductSerializer, CommentSerializer, ReplySerializer
+from .serializers import ProductSerializer, CommentSerializer, ReplySerializer, RatingSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import filters
@@ -28,7 +28,7 @@ class ApiSearch(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['productName', 'desc']
+    search_fields = ['name', 'description']
     ordering_fields = ['price']
 
 class BrandSearch(generics.ListAPIView):
@@ -47,7 +47,7 @@ class ProductSearch(generics.ListAPIView):
 
         # Filter the queryset based on the 'id' parameter
         if id:
-            queryset = Product.objects.filter(productId=id)
+            queryset = Product.objects.filter(product_id=id)
         
         return queryset
 
@@ -127,3 +127,14 @@ class ReplyView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class RatingView(APIView):
+    def post(self,request,product_id):
+        data = request.data
+        user = request.user
+        product = Product.objects.get(pk=product_id)
+        serializer = RatingSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=user, product=product)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+            

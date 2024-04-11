@@ -53,3 +53,6 @@ class blogCategory(generics.ListAPIView):
             queryset = Blog.objects.filter(category=cat)
         
         return queryset
+
+
+##generics.listapiview le xai image ko full url dinxa

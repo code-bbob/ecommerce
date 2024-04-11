@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'blog',
     'userauth',
     'import_export',
+    'ckeditor'
     
 ]
 
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, 'templates', ],
+        'DIRS': ['templates', ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,7 +130,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -139,7 +140,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #added to manage media
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
 
 AUTH_USER_MODEL = 'userauth.User'
 
@@ -156,7 +157,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=20),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=600),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=100),
 
     "AUTH_HEADER_TYPES": ("Bearer",),
@@ -172,7 +173,7 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 }
 
-PASSWORD_RESET_TIMEOUT = 900
+PASSWORD_RESET_TIMEOUT = 900 
 
 # Email Configuration
 EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
@@ -181,3 +182,17 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 EMAIL_USE_TLS = True
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock','LineHeight'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source']
+        ],
+        'height': 500,
+        'width': 700,
+    }
+}
