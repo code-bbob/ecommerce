@@ -14,8 +14,7 @@ import { logoutUser } from "../Redux/UserSlice";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { removeFromCart } from "../Redux/CartSlice";
-import { setToCart } from "../Redux/CartSlice";
+import { removeFromCart, showCart } from "../Redux/CartSlice";
 
 export function HeaderTop() {
   const dispatch = useDispatch();
@@ -33,6 +32,8 @@ export function HeaderTop() {
     });
     dispatch(logoutUser());
     navigate("/");
+    window.location.reload();
+
   }
 
   const userDetails = useSelector((state) => state.user.value);
@@ -93,26 +94,31 @@ export function HeaderTop() {
 
 export function HeaderMid() {
 
-
+  const [cartItemsRemove, setcartItemsRemove] = useState(null);
   const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch()
-  const cartItems = useSelector((state) => state.cart.cartItems);
   // console.log("cart from redux",cartItems)
   const userDetails = useSelector((state)=>state.user.value);
   const navigate = useNavigate();
   const [searched, setSearched] = useState(false);
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]);
-
-
-
-
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  console.log("cartItems",cartItems)
+  
+ 
 
   let totalPrice = 0;
-  cartItems.forEach((element) => {
-    totalPrice += element.price * element.quantity ;
-  });
+
+  useEffect(()=>{
+
+
+    cartItems?.forEach((element) => {
+      totalPrice += element?.price * element?.quantity ;
+    });
+  },[cartItems])
+    
 
   const URL = "http://localhost:8000/shop/api/";
   useEffect(() => {
@@ -142,43 +148,67 @@ export function HeaderMid() {
     setSearched(true);
   }
   const filteredProduct = products.filter((items) =>
-    items.productName?.toLowerCase().includes(query.toLowerCase())
+    items.name?.toLowerCase().includes(query.toLowerCase())
   );
   const results =
     filteredProduct.length > 0 && query.length > 0 ? filteredProduct : null;
   // console.log("queried filtered", results);
 
 
+  useEffect(() => {
+    if(cartItemsRemove != null || cartItemsRemove !=  undefined){
+      console.log("cart items from backend after remove", cartItemsRemove);
+  
+      const filteredCart = cartItemsRemove ? cartItemsRemove.order_items : [];
+      console.log("filtered cart items1", filteredCart);
+      const updatedOrderItems = filteredCart.map((item) => ({
+        ...item.product,
+        quantity: item.quantity,
+      }));
+    
+      console.log("filtered cart items100", updatedOrderItems);
+    
+      //cart ma pathauda product vith quantity pathaunu parxa product xuttai quantity xuttai esle read gardainna so tyo garne ra kati xoti order create hunxa kati products auxa tyo ni bujne
+  
+        dispatch(showCart(updatedOrderItems[0]));
+        console.log("##########",cartItems)
+      }
+      else {}
+  
+    },[cartItemsRemove])
+  
   function handleRemove(cartItems){
+    
     console.log("cartitems here", cartItems)
     if(userDetails){
       {
-        axios.patch("http://localhost:8000/cart/api/", {
-          order_items: [
+        axios.patch(
+          "http://localhost:8000/cart/api/",
+          {
+            order_items: [
               {
-                  product: cartItems.productId,
-                  quantity: cartItems.quantity - 1 ,
-              }
-          ]
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-      }
-      
-      },
-    )
+                product: cartItems.product_id,
+                quantity: cartItems.quantity - 1,
+              },
+            ],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
       .then((res) => {
-          console.log("returned after remove",res);
-          dispatch(setToCart(res.data.order_items));
-  
+          console.log("returned after remove",res.data);
+          setcartItemsRemove(res.data);
       })
       .catch((err) => {
           console.log(err);
       });
       }
-    }
     
+    }
+   
   else{
       dispatch(removeFromCart(cartItems))
       const existingCartItemsJSON = localStorage.getItem("cart-items");
@@ -188,17 +218,10 @@ export function HeaderMid() {
       if (indexToRemove !== -1) {
         existingCartItems.splice(indexToRemove, 1);
         localStorage.setItem("cart-items", JSON.stringify(existingCartItems));
-        console.log("Removed item with productId:", cartItems.productId);
-      }
-
-
-  
+        console.log("Removed item with productId:", cartItems.product_id);
+      }  
   }
-
-  
-
-
-  }
+}
 
   return (
     <>
@@ -226,13 +249,13 @@ export function HeaderMid() {
                   <div className="flex flex-row bg-red-400">
                     <div 
                       onClick={() => {
-                        navigate(`/products/${product.productId}`);
+                        navigate(`/products/${product.product_id}`);
                         setQuery("");
                       }}
-                      key={product.id}
+                      key={product.product_id}
                       className="hover:cursor-pointer z-40 w-full p-2 block border-1 bg-gray-400"
                     >
-                      {product.productName}
+                      {product.name}
                     </div>
                   </div>
                 </>
@@ -247,7 +270,9 @@ export function HeaderMid() {
           <Link className="no-underline text-black" to="/blog">
           <li>Blogs</li>
           </Link>
-          <li>Compare</li>
+          <Link className="no-underline text-black" to="/customPc">
+          <li>Build Custom PC</li>
+          </Link>
           <li className="flex items-center gap-1">
             <FaRegHeart />
             My wishlist
@@ -316,21 +341,28 @@ export function HeaderMid() {
                             </div>
                           </div>
 
+                              {cartItems != undefined && (
                           <div className="mt-8">
                             <div className="flow-root">
                               <ul
                                 role="list"
                                 className="-my-6 divide-y divide-gray-200"
                               >
-                                {cartItems?.map((cartItems) => (
+                                  
+                                  {cartItems && cartItems.map((cartItems) => {
+
+                                  {console.log("asdasdasdasdd")
+
+                                }
+                                return (
                                   <li
-                                    key={cartItems.productId}
+                                    key={cartItems?.product_id}
                                     className="flex py-6"
                                   >
                                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                       <img
-                                        src={cartItems.image}
-                                        alt={cartItems.imageAlt}
+                                        // src={cartItems.images[0]?.image}
+                                        alt={cartItems?.imageAlt}
                                         className="h-full w-full object-cover object-center"
                                       />
                                     </div>
@@ -339,18 +371,18 @@ export function HeaderMid() {
                                       <div>
                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                           <h3>
-                                            <a href={cartItems.href}>
-                                              {cartItems.productName}
+                                            <a href={cartItems?.href}>
+                                              {cartItems?.name}
                                             </a>
                                           </h3>
                                           <p className="ml-4">
-                                            Rs. {cartItems.price}
+                                            Rs. {cartItems?.price}
                                           </p>
                                         </div>
                                       </div>
                                       <div className="flex flex-1 items-end justify-between text-sm">
                                         <p className="text-gray-500">
-                                          Qty {cartItems.quantity}
+                                          Qty {cartItems?.quantity}
                                         </p>
 
                                         <div className="flex">
@@ -366,10 +398,11 @@ export function HeaderMid() {
                                     </div>
                                     
                                   </li>
-                                ))}
+  )})}
                               </ul>
                             </div>
                           </div>
+                              )}
                         </div>
 
                         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
@@ -449,15 +482,15 @@ export function HeaderBottom() {
     <>
       <div>
         <nav className="bg-black px-10">
-          <ul
+          <ul 
             onMouseLeave={handleMouseLeave}
             className="flex justify-between text-md text-white py-2"
           >
             {categories.map((category, i) => {
               return (
                 <>
-                  <div>
-                    <ul
+                  <div key={i}>
+                    <ul key={i}
                       onMouseEnter={() => handleMouseEnter(i)}
                       className="flex items-center gap-2"
                     >
@@ -496,12 +529,12 @@ export function HeaderBottom() {
                                           )
                                           .map((product, k) => (
                                             <li
-                                            onClick={()=>{navigate(`products/${product.productId}`)}}
+                                            onClick={()=>{navigate(`products/${product.product_id}`)}}
 
                                             className="text-gray-500 z-10	"
                                             key={k}
                                             >
-                                              {product.productName}
+                                              {product.name}
                                             </li>
                                             
                                           ))}
@@ -528,6 +561,5 @@ export function HeaderBottom() {
     </>
   );
 }
-
 
 

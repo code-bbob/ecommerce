@@ -14,6 +14,7 @@ export const UserSlice = createSlice({
      logoutUser :(state) => {
       state.value = null
       localStorage.removeItem("token")
+      localStorage.removeItem("cart-items")
        
      }
    

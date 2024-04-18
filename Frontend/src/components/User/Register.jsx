@@ -40,6 +40,11 @@ export function Login() {
         });
         dispatch(setUserDetails(res.data.userDetails))
         localStorage.setItem("token",res.data.userDetails.token.access)
+        setTimeout(() => {
+          window.location.reload();
+        }, 500); 
+        // Adjust the delay as needed
+      
         navigate("/")
 
       })

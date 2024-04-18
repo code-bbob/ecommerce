@@ -14,7 +14,7 @@ import { setToCart } from "../../Redux/CartSlice";
 
 export function ProductDetails() {
   const dispatch = useDispatch()
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState(null);
   const params = useParams();
   const productId = params.id;
   console.log("params",params)
@@ -34,8 +34,8 @@ export function ProductDetails() {
     axios
       .get(`http://localhost:8000/shop/api/${productId}`)
       .then((res) => {
-        console.log("here is product",res.data);
-        setProduct(res.data);
+        console.log("here is product",res.data[0]);
+        setProduct(res.data[0]);
       })
       .catch((err) => {
         console.log("error brah",err);
@@ -46,14 +46,16 @@ export function ProductDetails() {
   return (
     <>
     <ToastContainer/>
-      <div className="bg-gray-300 p-7 my-5">
-        <div className="flex  gap-7">
-          <div className="bg-white h-100% w-40 "></div>
-          <div>
-            <img className="h-full max-w-xl" src={product[0]?.images[0]?.image} alt="oops" />
-          </div>
-          <div>
-            <h1>{product[0]?.name}</h1>
+      <div className="bg-gray-300 px-7 py-10 -my-4 h-100%">
+       
+          
+          <div className="productDiv bg-white p-4 flex relative ml-72" >
+            <div className="productDiv">
+              <img className="productImg absolute -left-36" src={product?.images[0]?.image} alt="" />
+            </div>
+            <div className="">
+
+            <h1>{product?.name}</h1>
             <div className="flex items-center gap-2" >
               <span className="flex">
                 <IoIosStarOutline />
@@ -65,7 +67,7 @@ export function ProductDetails() {
               <span>0 Reviews / write a review</span>
             </div>
 
-            <h1 className="text-red-600">NRS. {product[0]?.price}</h1>
+            <h1 className="text-red-600">NRS. {product?.price}</h1>
             <span className="flex items-center my-3 gap-2">
               <span>Availability</span>
               <span className="flex">
@@ -75,8 +77,11 @@ export function ProductDetails() {
               </span>
             </span>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-3">
+              <div className="flex gap-3">
+
               <span className="">Qty</span>
+              
               <div className="flex items-center">
                 <div
                   className="bg-gray-200 p-2 cursor-pointer"
@@ -92,10 +97,20 @@ export function ProductDetails() {
                   <FaArrowUp className=" text-gray-600" />
                 </div>
               </div>
+              </div>
+              <div className="flex  gap-4">
+
               <button onClick={() => {
                     console.log("here");
-                    dispatch(setToCart(product[0]));
-                    toast.success(`${product[0].name} added to Cart`, {
+                    const ProductsToDispatch = [...product, {quantity: quantity}]
+                    //creating a nev key value pair
+                    
+                    // for (let i = 0; i < quantity; i++) {
+                    // dispatch(setToCart(ProductsToDispatch));
+
+                    // }
+                    dispatch(setToCart(ProductsToDispatch))
+                    toast.success(`${product.name} added to Cart`, {
                       position: "top-right",
                       autoClose: 2000,
                       hideProgressBar: false,
@@ -105,14 +120,17 @@ export function ProductDetails() {
                       theme: "dark",
                     });
                   }}
-              className="px-4 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg mx-3">Add to Cart</button>
+              className="w-50 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg ">Add to Cart</button>
               <button className="border bg-white hover:bg-orange-300 px-2 ">
                 <CiHeart />
               </button>
+              </div>
+
             </div>
           </div>
         </div>
-      </div>
+        </div>
+
     </>
   );
 }

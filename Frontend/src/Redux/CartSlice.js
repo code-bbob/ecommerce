@@ -42,7 +42,14 @@ export const CartSlice = createSlice({
     
      setToCart :(state,action) => {
       console.log("called with action here",action)
-        let products = action.payload   
+        let products = action.payload  
+        if (!Array.isArray(products)) {
+          // Convert it into an array
+          products = [products];
+      }
+      else{
+        
+      }
         console.log("product here",products)
 
         let oldItems = [...state.cartItems] 
@@ -50,23 +57,24 @@ export const CartSlice = createSlice({
 
         const p = products.map((product)=>{
           return {
-            productId: product.product_id,
-            productName: product.name,
+            product_id: product.product_id,
+            name: product.name,
             price: product.price,
             image: product.images[0].image,
-            category: product.category
+            category: product.category,
+            quantity: product.quantity,
 
           }
          })
          // let {productId, productName,price,image, category} = product
         
          p.forEach((pItem) => {
-          let matched = oldItems.find((el) => el.productId == pItem.productId);
+          let matched = oldItems.find((el) => el.product_id == pItem.product_id);
         
         if(matched){
             oldItems = oldItems.map((el)=>{
-                if(el.productId === pItem.productId){
-                    return {...el, quantity: el.quantity + 1  }
+                if(el.product_id === pItem.product_id){
+                    return {...el, quantity: el.quantity + pItem.quantity  }
                 }
                 
                 return el
@@ -74,8 +82,9 @@ export const CartSlice = createSlice({
 
         }else {
 
-             oldItems.push({...pItem, quantity: 1})
+             oldItems.push({...pItem, quantity: pItem.quantity})
         }
+
       });
 
         state.cartItems = oldItems
@@ -101,12 +110,16 @@ export const CartSlice = createSlice({
         // Filter out items with quantity greater than 0
         state.cartItems = updatedCartItems.filter(item => item.quantity > 0);
       }
-      
-   
+      ,
+      showCart: (state,action) => {
+        const product = action.payload  
+        state.cartItems = [product]
+        console.log("*****************",state.cartItems)
+      }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setToCart, removeFromCart } = CartSlice.actions
+export const { setToCart, removeFromCart, showCart } = CartSlice.actions
 
 export default CartSlice.reducer

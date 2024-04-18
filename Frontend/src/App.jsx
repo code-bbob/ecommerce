@@ -15,13 +15,16 @@ import { BlogsView } from "./components/Blogs/blogs";
 import { CategoryBlog } from "./components/Blogs/catblog";
 import { BlogPost } from "./components/Blogs/BlogPost";
 import { setToCart } from "./Redux/CartSlice";
+import { CustomPC } from "./components/CustomPc/CustomPC";
 
 // index.js or App.js
 
 function App() {
     // localStorage.clear()
-  const [cartItems, setcartItems] = useState({});
+  const [cartItems, setcartItems] = useState(null);
   const accesstoken = localStorage.getItem("token");
+  const cartProducts = localStorage.getItem("cart-items");
+  
   const dispatch = useDispatch();
   // console.log(accesstoken);
 
@@ -40,61 +43,72 @@ function App() {
           dispatch(setUserDetails(res.data));
         })
         .catch((err) => console.log(err));
-
+      
       axios
         .get("http://localhost:8000/cart/api/", {
           headers: {  
-            authorization: `Bearer ${accesstoken}`,
+            authorization: `Bearer ${accesstoken}`, 
           },
         })
 
         .then((res) => {
-          // console.log("here is value",res)
+          console.log("here is value***************",res)
           setcartItems(res.data);
+
+          //cartProduct is from localstorage and cartItems if from backend so it checks if item from backend is null but the localstorage there is value
+          if(cartItems == null && cartProducts !== null){
+            const updatedCartProducts = cartProducts
+            ? JSON.parse(cartProducts): [];
+    
+            console.log("updatedCartProducts********8",updatedCartProducts)
+            updatedCartProducts.map((item)=>{
+    
+              axios
+              .post(
+                "http://localhost:8000/cart/api/",
+                {
+                  order_items: [
+                    {
+                      product: item.product_id,
+                      quantity: item.quantity,
+                    }
+                  ]
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${accesstoken}`,
+                  },
+                }
+              )
+              .then((res) => {
+                console.log("posting##############3")
+                console.log("post successful.............", res);
+    
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+              
+            })
+            dispatch(setToCart(updatedCartProducts));
+            localStorage.removeItem("cart-items")
+
+          // }
+          
           // console.log("cart items from backend", cartItems);
-          //res.data bata ordered_items bane matra filter garera dispatch garuparyo redux slice ma kina bhane unnecessary junk chaidaina
+          // //res.data bata ordered_items bane matra filter garera dispatch garuparyo redux slice ma kina bhane unnecessary junk chaidaina
 
-          const filteredCart = cartItems.map(item => item.order_items);
-          // console.log("filtered cart items", filteredCart);
+          // const filteredCart = cartItems ? cartItems.map(item => item.order_items) : [];
+          // // console.log("filtered cart items", filteredCart);
 
 
-          //ok everything works just fine tara consistency ra integrity banne chij xaina data ko product ra id and quantity dinxa yo array le tara dispatch garda initial product ko details jasari sapp data including productId quantity pic sapp bako dispatch garun parxa ani hunxa so do that i.e change the model of this return of get request anni dispatch handa hunxa but still euta arko error xa ctrl s handa same hune wala  yo solve bayepaxi sayad remove ma ni same nai copy paste hola nnothing specific 
-          // dispatch(setToCart(filteredCart));
-        })
+        
+          // // dispatch(setToCart(filteredCart));
+    }})
         .catch((err) => console.log(err));
     }
 
-    //   if(cart_items?.length > 0 ){
-
-    //     const Ucart_items = cart_items.parse(cart_items)
-    //     const fCart = [...Ucart_items]
-
-    //     fCart.forEach((items)=>{
-
-    //       axios.post("localhost:8000/cart/api/",{
-    //       headers : {
-    //         authorization: `bearer ${accesstoken}`
-    //       },
-
-    //       order_items : [
-    //         {
-    //           product : items.productId,
-    //           quantity : items.quantity,
-    //         }
-    //       ]
-
-    //     })
-    //     .then((res)=>{
-    //       console.log(res)
-    //       dispatch(setToCart(fCart))
-    //       localStorage.removeItem("cart-items")
-
-    //     })
-    //       .catch((err)=>{
-    //         console.log(err)
-    //       })
-    //     })
-
+  
     // }
     else {
       // Retrieve cart items from localStorage
@@ -114,6 +128,28 @@ function App() {
     }
   }, []);
 
+  
+    useEffect(() => {
+      console.log("cart items from backend", cartItems);
+            
+      if(cartItems != null){
+
+        const filteredCart = cartItems ? cartItems.filter(item => item.order_items).flatMap(item => item.order_items) : [];
+//filters and flatmap vithout creating a nev array cause map vould create a nev array 
+      console.log("filtered cart items1", filteredCart);
+      const updatedOrderItems = filteredCart.map((item) => ({
+        ...item.product,
+        quantity: item.quantity,
+      }));
+    
+      console.log("filtered cart items100", updatedOrderItems);
+      //cart ma pathauda product vith quantity pathaunu parxa product xuttai quantity xuttai esle read gardainna so tyo garne ra kati xoti order create hunxa kati products auxa tyo ni bujne
+
+        dispatch(setToCart(updatedOrderItems));
+      }
+      else {}
+      
+  }, [cartItems]); // Add cartItems as a dependency to useEffect
   return (
     <>
       <Routes>
@@ -129,6 +165,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/customPc" element={<CustomPC />} />
           <Route path="/products">
             <Route path=":id" element={<ProductDetails />} />
             <Route

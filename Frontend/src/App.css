@@ -2,6 +2,28 @@
 
 
 
+
+/* product detail image height adjustment CSS */
+
+.productDiv {
+  height: 70vh;
+  width: 65%;
+  
+
+}
+.productImg {
+  height: 400px;
+  width: 500px;
+
+}
+
+/* footer carousel images  */
+.imagesCarouselFooter{
+  height: 45px ;
+  width: 100px;
+}
+
+
 /* styling for singleproduct hover card design */
 
 

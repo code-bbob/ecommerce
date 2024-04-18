@@ -41,7 +41,7 @@ export const Home = () => {
     <>
       <Carousel />
       <div className="bg-gray-300">
-        <h1 className="text-center mt-10">Latest Products</h1>
+        <h1 className="text-center mt-14">Latest Products</h1>
 
         <Products/>
 
