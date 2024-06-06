@@ -5,7 +5,14 @@ from shop.serializers import ProductSerializer
 
 class OrderItemSerializer(serializers.ModelSerializer):
     # product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())  # Adjust queryset based on your Product model
-    product = ProductSerializer(read_only=True)
+    product = ProductSerializer(read_only = True)
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'product', 'quantity']
+
+class OrderItemPostSerializer(serializers.ModelSerializer):
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())  # Adjust queryset based on your Product model
+    # product = ProductSerializer(read_only = True)
     class Meta:
         model = OrderItem
         fields = ['id', 'product', 'quantity']
@@ -19,7 +26,7 @@ class DeliverySerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True, read_only=True)
     user = serializers.SerializerMethodField()
-    delivery = DeliverySerializer
+    delivery = DeliverySerializer(read_only=True)
 
     class Meta:
         model = Order

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Plugins from "./plugins";
+import Plugins from "./Plugins";
 import BlogFooter from "./blogFooter";
 
 export function CategoryBlog() {

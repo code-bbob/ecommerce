@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BlogFooter from "./blogFooter";
-import Plugins from "./plugins";
+import Plugins from "./Plugins";
 
 export function BlogsView() {
   const [blog, setBlog] = useState([]);
