@@ -111,7 +111,7 @@ export function HeaderMid() {
       .get(URL)
       .then((res) => {
         setProducts(res.data);
-        console.log("products from api", products);
+
       })
       .catch((err) => {
         console.log(err);
@@ -133,7 +133,7 @@ export function HeaderMid() {
     setSearched(true);
   }
   const filteredProduct = products.filter((items) =>
-    items.productName.toLowerCase().includes(query.toLowerCase())
+    items.name.toLowerCase().includes(query.toLowerCase())
   );
   const results =
     filteredProduct.length > 0 && query.length > 0 ? filteredProduct : null;
@@ -171,7 +171,7 @@ export function HeaderMid() {
                       key={product.id}
                       className="z-40 w-full p-2 block border-1 bg-gray-400"
                     >
-                      {product.productName}
+                      {product.name}
                     </div>
                   </div>
                 </>
