@@ -9,7 +9,7 @@ import SingleProduct from "./Products/SingleProduct";
 
 
 const BlogCard = ({ blog }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   return (
     <div onClick={() => navigate(`/blog/${blog.id}`)} className="bg-white rounded-lg overflow-hidden shadow-xl transform hover:scale-105 transition duration-300 hover:shadow-lg">
@@ -42,7 +42,7 @@ export function Products () {
   }, []);
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container bg-gray-300 mx-auto py-8">
       <ToastContainer />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

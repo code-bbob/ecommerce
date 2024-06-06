@@ -16,6 +16,7 @@ import { CategoryBlog } from "./components/Blogs/catblog";
 import { BlogPost } from "./components/Blogs/BlogPost";
 import { setToCart } from "./Redux/CartSlice";
 import { CustomPC } from "./components/CustomPc/CustomPC";
+// import { FilteredProduct } from "./components/Products/FilteredProduct";
 
 // index.js or App.js
 
@@ -166,6 +167,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/customPc" element={<CustomPC />} />
+          {/* <Route path="/categories/:category" element={<FilteredProduct />} /> */}
+
           <Route path="/products">
             <Route path=":id" element={<ProductDetails />} />
             <Route

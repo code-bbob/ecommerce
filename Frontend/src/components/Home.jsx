@@ -40,11 +40,11 @@ export const Home = () => {
   return (
     <>
       <Carousel />
-      <div className="bg-gray-300">
+      <div className="bg-white">
         <h1 className="text-center mt-14">Latest Products</h1>
 
         <Products/>
-
+        
         {/* <h1 className="text-center mt-10">Latest Blogs</h1>
         <BlogsView/> */}
       </div>

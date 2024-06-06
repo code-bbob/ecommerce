@@ -102,7 +102,11 @@ export function ProductDetails() {
 
               <button onClick={() => {
                     console.log("here");
-                    const ProductsToDispatch = [...product, {quantity: quantity}]
+                    console.log("product clicked",product)
+                    const pr = {...product, quantity: quantity}
+                    const ProductsToDispatch = [pr]
+                    console.log("asdasd",ProductsToDispatch)
+
                     //creating a nev key value pair
                     
                     // for (let i = 0; i < quantity; i++) {

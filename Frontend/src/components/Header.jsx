@@ -498,6 +498,7 @@ export function HeaderBottom() {
                         key={i}
                         className=" z-10	text-white text-lg flex items-center gap-3 cursor-pointer "
                         style={{ position: "relative" }}
+                        onClick={()=> navigate(`/categories/${category}`)}
                       >
                         {category}
                         {hoveredIndex === i && (

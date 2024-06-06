@@ -10,7 +10,6 @@ import axios from "axios";
 export default function Singleproduct({ prod }) {
   const [isActive, setIsActive] = useState();
   const userDetails = useSelector((state) => state.user.value);
-  // console.log("user", userDetails);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
