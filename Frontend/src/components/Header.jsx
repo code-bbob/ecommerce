@@ -127,6 +127,7 @@ export function HeaderMid() {
       .then((res) => {
         setProducts(res.data);
         // console.log("products from api", products);
+
       })
       .catch((err) => {
         console.log(err);
@@ -148,7 +149,9 @@ export function HeaderMid() {
     setSearched(true);
   }
   const filteredProduct = products.filter((items) =>
+
     items.name?.toLowerCase().includes(query.toLowerCase())
+
   );
   const results =
     filteredProduct.length > 0 && query.length > 0 ? filteredProduct : null;
